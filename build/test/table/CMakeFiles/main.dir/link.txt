@@ -1,0 +1,1 @@
+/usr/bin/g++  -fprofile-arcs -ftest-coverage -g  -fprofile-arcs -ftest-coverage CMakeFiles/main.dir/__/main.cpp.o CMakeFiles/main.dir/select_test.cpp.o -o main   -L/data/iotdb-test/test/cpp-session-test/client/lib  -Wl,-rpath,/data/iotdb-test/test/cpp-session-test/client/lib -liotdb_session ../../../client/lib/libthrift.a ../../../client/lib/libgtest.a -ldl 

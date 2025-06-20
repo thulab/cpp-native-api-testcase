@@ -1,0 +1,5 @@
+/data/iotdb-test/test/cpp-session-test/build/CMakeFiles/edit_cache.dir
+/data/iotdb-test/test/cpp-session-test/build/CMakeFiles/rebuild_cache.dir
+/data/iotdb-test/test/cpp-session-test/build/test/table/CMakeFiles/main.dir
+/data/iotdb-test/test/cpp-session-test/build/test/table/CMakeFiles/edit_cache.dir
+/data/iotdb-test/test/cpp-session-test/build/test/table/CMakeFiles/rebuild_cache.dir

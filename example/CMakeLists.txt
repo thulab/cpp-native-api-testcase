@@ -1,0 +1,21 @@
+#设置启动项
+# add_executable(main_tree "main_tree.cpp" )
+# add_executable(main_table "main_table.cpp" )
+# add_executable(TableModelSessionExample "TableModelSessionExample.cpp" )
+# add_executable(TestTable "TestTable.cpp" )
+# add_executable(TestTree "TestTree.cpp" )
+add_executable(tableSessionExample "tableSessionExample.cpp" )
+# add_executable(sessionExample "sessionExample.cpp" )
+
+#根据编译器设置链接库
+IF(MSVC)
+    # TARGET_LINK_LIBRARIES(SessionConnectTest_Normal iotdb_session "${CMAKE_SOURCE_DIR}/client/lib/Release/thriftmd.lib")
+ELSE()
+    # TARGET_LINK_LIBRARIES(main_tree iotdb_session "${CMAKE_SOURCE_DIR}/client/lib/libcppunit.so" dl)
+    # TARGET_LINK_LIBRARIES(main_table iotdb_session "${CMAKE_SOURCE_DIR}/client/lib/libthrift.a" dl)
+    # TARGET_LINK_LIBRARIES(TableModelSessionExample iotdb_session "${CMAKE_SOURCE_DIR}/client/lib/libthrift.a" dl)
+    # TARGET_LINK_LIBRARIES(TestTable iotdb_session "${CMAKE_SOURCE_DIR}/client/lib/libthrift.a" dl)
+    # TARGET_LINK_LIBRARIES(TestTree iotdb_session "${CMAKE_SOURCE_DIR}/client/lib/libthrift.a" dl)
+    TARGET_LINK_LIBRARIES(tableSessionExample iotdb_session "${CMAKE_SOURCE_DIR}/client/lib/libthrift.a" dl)
+    # TARGET_LINK_LIBRARIES(sessionExample iotdb_session "${CMAKE_SOURCE_DIR}/client/lib/libthrift.a" dl)
+ENDIF()
