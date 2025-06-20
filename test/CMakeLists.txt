@@ -6,7 +6,7 @@ ${CMAKE_SOURCE_DIR}/test/main.cpp
 # ${CMAKE_SOURCE_DIR}/test/table/table_session_build_test.cpp  需要参考select_test更新用例
 ${CMAKE_SOURCE_DIR}/test/table/select_test.cpp 
 # 树模型测试用例
-# ${CMAKE_SOURCE_DIR}/test/tree/select_test.cpp 
+${CMAKE_SOURCE_DIR}/test/tree/select_test.cpp 
 # 测试覆盖率的源文件
 # ${CMAKE_SOURCE_DIR}/client/include/TableSession.cpp ${CMAKE_SOURCE_DIR}/client/include/SessionDataSet.cpp ${CMAKE_SOURCE_DIR}/client/include/client_types.cpp 
 # ${CMAKE_SOURCE_DIR}/client/include/Column.cpp  ${CMAKE_SOURCE_DIR}/client/include/ColumnDecoder.cpp  ${CMAKE_SOURCE_DIR}/client/include/common_types.cpp  

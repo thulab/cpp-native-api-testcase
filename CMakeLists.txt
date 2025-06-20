@@ -29,5 +29,5 @@ ENDIF()
 LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/client/lib)
 
 # 包含子项目。
-add_subdirectory ("test/table")
+add_subdirectory ("test")
 # add_subdirectory ("example")
