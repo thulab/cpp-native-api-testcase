@@ -52,13 +52,13 @@
 41,true,10,10,10.01,10.01,text,string,blob,2025-1-1,0
 42,true,10,10,10.01,10.01,text,string,blob,2025-1-1,9223372036854775807
 # 空值
-#43,null,10,10,10.01,10.01,text,string,blob,2025-1-1,9223372036854775807
-#44,null,null,10,10.01,10.01,text,string,blob,2025-1-1,9223372036854775807
-#45,null,null,null,10.01,10.01,text,string,blob,2025-1-1,9223372036854775807
-#46,null,null,null,null,10.01,text,string,blob,2025-1-1,9223372036854775807
-#47,null,null,null,null,null,text,string,blob,2025-1-1,9223372036854775807
-#48,null,null,null,null,null,null,string,blob,2025-1-1,9223372036854775807
-#49,null,null,null,null,null,null,null,blob,2025-1-1,9223372036854775807
-#50,null,null,null,null,null,null,null,null,2025-1-1,9223372036854775807
-#51,null,null,null,null,null,null,null,null,null,9223372036854775807
-#52,null,null,null,null,null,null,null,null,null,null
+43,null,10,10,10.01,10.01,text,string,blob,2025-1-1,9223372036854775807
+44,null,null,10,10.01,10.01,text,string,blob,2025-1-1,9223372036854775807
+45,null,null,null,10.01,10.01,text,string,blob,2025-1-1,9223372036854775807
+46,null,null,null,null,10.01,text,string,blob,2025-1-1,9223372036854775807
+47,null,null,null,null,null,text,string,blob,2025-1-1,9223372036854775807
+48,null,null,null,null,null,null,string,blob,2025-1-1,9223372036854775807
+49,null,null,null,null,null,null,null,blob,2025-1-1,9223372036854775807
+50,null,null,null,null,null,null,null,null,2025-1-1,9223372036854775807
+51,null,null,null,null,null,null,null,null,null,9223372036854775807
+52,null,null,null,null,null,null,null,null,null,null

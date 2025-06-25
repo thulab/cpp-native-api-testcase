@@ -444,7 +444,7 @@ TEST_F(TableSelectTest, TestSelect2) {
                                 ASSERT_EQ(dataIterator1.getLongByIndex(column+2).is_initialized(), 0) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator1.getLongByIndex(column+2).is_initialized() << ", Actual: " << 0 << std::endl;
                                 break;
                             case TSDataType::TIMESTAMP:
-                                // ASSERT_EQ(dataIterator1.getTimestampByIndex(column+2).is_initialized(), 0) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator1.getTimestampByIndex(column+2).is_initialized() << ", Actual: " << 0 << std::endl;
+                                ASSERT_EQ(dataIterator1.getTimestampByIndex(column+2).is_initialized(), 0) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator1.getTimestampByIndex(column+2).is_initialized() << ", Actual: " << 0 << std::endl;
                             break;
                             case TSDataType::FLOAT:
                                 ASSERT_EQ(dataIterator1.getFloatByIndex(column+2).is_initialized(), 0) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator1.getFloatByIndex(column+2).is_initialized() << ", Actual: " << 0 << std::endl;
@@ -537,11 +537,11 @@ TEST_F(TableSelectTest, TestSelect2) {
             } else {
                 ASSERT_EQ(dataIterator2.getDateByIndex(14).value(), dataIterator2.getDate("date")) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator2.getDateByIndex(14) << ", Actual: " << dataIterator2.getDate("date") << std::endl;
             }
-            // if (dataIterator2.isNullByIndex(15) == 1) {
-            //     ASSERT_EQ(dataIterator2.getTimestampByIndex(15).is_initialized(), 0) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator2.getTimestampByIndex(15) << ", Actual: " << 0 << std::endl;
-            // } else {
-            //     ASSERT_EQ(dataIterator2.getTimestampByIndex(15).value(), dataIterator2.getTimestamp("timestamp")) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator2.getTimestampByIndex(15) << ", Actual: " << dataIterator2.getTimestamp("timestamp") << std::endl;
-            // }
+            if (dataIterator2.isNullByIndex(15) == 1) {
+                ASSERT_EQ(dataIterator2.getTimestampByIndex(15).is_initialized(), 0) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator2.getTimestampByIndex(15) << ", Actual: " << 0 << std::endl;
+            } else {
+                ASSERT_EQ(dataIterator2.getTimestampByIndex(15).value(), dataIterator2.getTimestamp("timestamp")) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator2.getTimestampByIndex(15) << ", Actual: " << dataIterator2.getTimestamp("timestamp") << std::endl;
+            }
         }
         // 5、验证是否为空值判断的正确性
         unique_ptr<SessionDataSet> dataSet3 = tableSession_TableSelect->executeQueryStatement("select time,tag1,tag2,attr1,attr2,boolean,int32,int64,float,double,text,string,blob,date,timestamp from " + TABLE_NAME_TableSelect + " order by time");

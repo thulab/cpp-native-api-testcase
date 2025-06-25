@@ -19,10 +19,9 @@ SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-cove
 # 添加头文件路径
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/client/include)
 # 查找boost
-find_package(Boost REQUIRED)
-# 若boost配置好了，则添加到头文件搜索路径
+FIND_PACKAGE(Boost REQUIRED)
 IF (DEFINED BOOST_INCLUDEDIR)
-    INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+    include_directories("${Boost_INCLUDE_DIR}")
 ENDIF()
 
 # 指定库文件的目录
