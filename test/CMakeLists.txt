@@ -16,4 +16,4 @@ ${CMAKE_SOURCE_DIR}/test/tree/select_test.cpp
 )
 
 #设置链接库
-TARGET_LINK_LIBRARIES(main iotdb_session "${CMAKE_SOURCE_DIR}/client/lib/libthrift.a" "${CMAKE_SOURCE_DIR}/client/lib/libgtest.a" dl)
+TARGET_LINK_LIBRARIES(main iotdb_session "${CMAKE_SOURCE_DIR}/client/lib/libthrift.a" "${CMAKE_SOURCE_DIR}/client/lib/libgtest.a" dl pthread)
