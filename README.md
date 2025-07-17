@@ -49,7 +49,11 @@ cd iotdb
 ./run_test.sh
 ```
 
+成功结果如下图所示
+
 ![image-20240912111738245](./assert/run_test1.png)
+
+出现错误结果如下图所示
 
 ![image-20240912111707611](./assert/run_test2.png)
 
