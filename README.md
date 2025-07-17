@@ -21,17 +21,20 @@
 
 ### 2、编译
 
-在项目主目录下执行：`./compile.sh` 命令，输出信息如下。
+拉取iotdb源码并编译生成c++头文件和库文件
 
-![image-20240912111515791](./assert/compile.png)
+```bash
+# 拉取
+git clone https://github.com/apache/iotdb.git
+cd iotdb
+# 编译c++（glibc 版本 >= 2.17 的 Linux，更多平台编译详见IoTDB官网）
+./mvnw clean package -pl example/client-cpp-example -am -DskipTests -P with-cpp -Diotdb-tools-thrift.version=0.14.1.1-glibc223-SNAPSHOT
+# 存放头文件和库文件
+头文件位于：iotdb-client/client-cpp/target/client-cpp-2.0.5-SNAPSHOT-cpp-linux-x86_64/include下，存放到Cpp-Session-Test/client/include下
+库文件位于：iotdb-client/client-cpp/target/client-cpp-2.0.5-SNAPSHOT-cpp-linux-x86_64/lib下，存放到Cpp-Session-Test/client/lib下
+```
 
-### 3、执行
-
-在项目主目录下先编译完，然后执行：`./run_test.sh` 命令，输入需要执行的文件名，执行成功信息如下图一，执行失败信息如下图二。
-
-![image-20240912111738245](./assert/run_test1.png)
-
-![image-20240912111707611](./assert/run_test2.png)
+第一次需要手动编译gtest生成gtest头文件和库文件，也存放到同样地方下
 
 ---
 
@@ -45,4 +48,8 @@
 # 执行
 ./run_test.sh
 ```
+
+![image-20240912111738245](./assert/run_test1.png)
+
+![image-20240912111707611](./assert/run_test2.png)
 
