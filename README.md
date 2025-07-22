@@ -16,7 +16,7 @@
 ├── CMakePresets.json           // CMake项目构建配置文件
 ├── compile.sh                  // 编译脚本
 ├── README.md                   // 程序说明文档
-├── run_test.sh                 // 执行脚本
+├── run.sh                 // 执行脚本
 ```
 
 ### 2、编译
