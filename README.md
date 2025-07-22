@@ -40,13 +40,13 @@ cd iotdb
 
 ## 二、使用
 
-在项目根目录下执行命令
+在根目录下执行命令
 
 ```bash
 # 编译
 ./compile.sh
 # 执行
-./run_test.sh
+./run.sh
 ```
 
 成功结果如下图所示
