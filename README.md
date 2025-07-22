@@ -34,7 +34,7 @@ cd iotdb
 库文件位于：iotdb-client/client-cpp/target/client-cpp-2.0.5-SNAPSHOT-cpp-linux-x86_64/lib下，存放到Cpp-Session-Test/client/lib下
 ```
 
-第一次需要手动编译gtest生成gtest头文件和库文件，也存放到同样地方下
+第一次需要手动编译gtest测试工具生成gtest头文件和库文件，也存放到同样地方下
 
 ---
 
