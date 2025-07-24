@@ -10,10 +10,12 @@ SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 # 设置启用位置无关代码
 SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
-# coverage option
+# 代码覆盖率编译选项
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+# DEBUG选项
+# SET(CMAKE_BUILD_TYPE Debug)
 
 
 # 添加头文件路径

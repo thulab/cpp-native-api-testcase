@@ -3,7 +3,7 @@ add_executable(main
 ${CMAKE_SOURCE_DIR}/test/main.cpp 
 # 表模型测试用例
 # ${CMAKE_SOURCE_DIR}/test/table/insert_test.cpp  # 需要参考select_test更新用例
-# ${CMAKE_SOURCE_DIR}/test/table/table_session_build_test.cpp  需要参考select_test更新用例
+${CMAKE_SOURCE_DIR}/test/table/session_test.cpp
 ${CMAKE_SOURCE_DIR}/test/table/select_test.cpp 
 # 树模型测试用例
 ${CMAKE_SOURCE_DIR}/test/tree/select_test.cpp 
@@ -16,4 +16,4 @@ ${CMAKE_SOURCE_DIR}/test/tree/select_test.cpp
 )
 
 #设置链接库
-TARGET_LINK_LIBRARIES(main iotdb_session "${CMAKE_SOURCE_DIR}/client/lib/libthrift.a" "${CMAKE_SOURCE_DIR}/client/lib/libgtest.a" dl pthread)
+TARGET_LINK_LIBRARIES(main iotdb_session "${CMAKE_SOURCE_DIR}/client/lib/libthrift.a" "${CMAKE_SOURCE_DIR}/client/lib/libgtest.a" dl)

@@ -19,7 +19,7 @@
 
 using namespace std;
 
-TableSession *tableSession_TableSelect; // 作为全局的session变量
+TableSession *session_select_test; // 作为全局的session变量
 bool isErrorTest_TableSelect = false; // 用于确认是否出错的标识
 int expectNum_TableSelect = 0; // 用于记录插入期待的行数
 int actualNum_TableSelect = 0; // 用于记录实际查询的行数
@@ -157,7 +157,7 @@ void insertDate_TableSelect() {
             expectNum_TableSelect++;
         }
         tablet.setAligned(false);
-        tableSession_TableSelect->insert(tablet);
+        session_select_test->insert(tablet);
     }  catch (IoTDBConnectionException &e) {
         isErrorTest_TableSelect = true;
         ASSERT_EQ(false, isErrorTest_TableSelect) << "[Error] IoTDBConnectionException - " << string(e.what());
@@ -178,15 +178,15 @@ class TableSelectTest : public ::testing::Test {
         void SetUp() override {
             // 初始化操作
             try {
-                tableSession_TableSelect = (new TableSessionBuilder())
+                session_select_test = (new TableSessionBuilder())
                     ->host("127.0.0.1")
                     ->rpcPort(6667)
                     ->username("root")
                     ->password("root")
                     ->build();
-                tableSession_TableSelect->executeNonQueryStatement("CREATE DATABASE " + DATABASE_NAME_TableSelect);
-                tableSession_TableSelect->executeNonQueryStatement("use " + DATABASE_NAME_TableSelect);
-                tableSession_TableSelect->executeNonQueryStatement("CREATE TABLE " + TABLE_NAME_TableSelect + " (tag1 STRING TAG, tag2 STRING TAG, attr1 STRING ATTRIBUTE, attr2 STRING ATTRIBUTE, BOOLEAN BOOLEAN FIELD, INT32 INT32 FIELD, INT64 INT64 FIELD, FLOAT FLOAT FIELD, DOUBLE DOUBLE FIELD, TEXT TEXT FIELD, STRING STRING FIELD, BLOB BLOB FIELD, DATE DATE FIELD, TIMESTAMP TIMESTAMP FIELD)");
+                session_select_test->executeNonQueryStatement("CREATE DATABASE " + DATABASE_NAME_TableSelect);
+                session_select_test->executeNonQueryStatement("use " + DATABASE_NAME_TableSelect);
+                session_select_test->executeNonQueryStatement("CREATE TABLE " + TABLE_NAME_TableSelect + " (tag1 STRING TAG, tag2 STRING TAG, attr1 STRING ATTRIBUTE, attr2 STRING ATTRIBUTE, BOOLEAN BOOLEAN FIELD, INT32 INT32 FIELD, INT64 INT64 FIELD, FLOAT FLOAT FIELD, DOUBLE DOUBLE FIELD, TEXT TEXT FIELD, STRING STRING FIELD, BLOB BLOB FIELD, DATE DATE FIELD, TIMESTAMP TIMESTAMP FIELD)");
                 insertDate_TableSelect();
             }  catch (IoTDBConnectionException &e) {
                 isErrorTest_TableSelect = true;
@@ -204,8 +204,8 @@ class TableSelectTest : public ::testing::Test {
             // 清理操作
             expectNum_TableSelect = 0;
             try {
-                tableSession_TableSelect->executeNonQueryStatement("drop DATABASE " + DATABASE_NAME_TableSelect);
-                tableSession_TableSelect->close();
+                session_select_test->executeNonQueryStatement("drop DATABASE " + DATABASE_NAME_TableSelect);
+                session_select_test->close();
             }  catch (IoTDBConnectionException &e) {
                 isErrorTest_TableSelect = true;
                 ASSERT_EQ(false, isErrorTest_TableSelect) << "[Error] IoTDBConnectionException - " << string(e.what());
@@ -225,7 +225,7 @@ class TableSelectTest : public ::testing::Test {
 // 一、验证executeQueryStatement和RowRecord的Field查询：包含SessionDataSet类查询返回的列名、数据类型和行数正确性和其他方法可用性，RowRecord的Field查询值的正确性（注意：目前表模型使用Field查询存在问题）
 TEST_F(TableSelectTest, TestSelect1) {
     try {
-        unique_ptr<SessionDataSet> dataSet = tableSession_TableSelect->executeQueryStatement("select time,tag1,tag2,attr1,attr2,boolean,int32,int64,float,double,text,string,blob,date,timestamp from " + TABLE_NAME_TableSelect + " order by time");
+        unique_ptr<SessionDataSet> dataSet = session_select_test->executeQueryStatement("select time,tag1,tag2,attr1,attr2,boolean,int32,int64,float,double,text,string,blob,date,timestamp from " + TABLE_NAME_TableSelect + " order by time");
         // 1、验证列名正确性
         auto getColumnNames = dataSet->getColumnNames();
         for (int i = 0; i < columnNames_TableSelect.size(); i++) {
@@ -291,7 +291,7 @@ TEST_F(TableSelectTest, TestSelect1) {
         ASSERT_EQ(expectNum_TableSelect, actualNum_TableSelect) << "[TestSelect1 FAIL] Expected num and actual num are inconsistent"
         << " Expected: " << expectNum_TableSelect << ", Actual: " << actualNum_TableSelect << std::endl;
         // 4、验证值正确性（表模型无法正确获取，树模型可以）
-        // unique_ptr<SessionDataSet> dataSet2 = tableSession_TableSelect->executeQueryStatement("select time,tag1,tag2,attr1,attr2,boolean,int32,int64,float,double,text,string,blob,date,timestamp from " + TABLE_NAME_TableSelect + " order by time");
+        // unique_ptr<SessionDataSet> dataSet2 = session_select_test->executeQueryStatement("select time,tag1,tag2,attr1,attr2,boolean,int32,int64,float,double,text,string,blob,date,timestamp from " + TABLE_NAME_TableSelect + " order by time");
         // while (dataSet2->hasNext()) {
             // auto rowRecord = dataSet->next();
             // cout << rowRecord->timestamp << " ";  
@@ -330,7 +330,7 @@ TEST_F(TableSelectTest, TestSelect1) {
 // 二、验证DataIterator查询：包含返回列名、数据类型和值正确性、同种数据类型通过索引和通过列名返回值一致性、是否为空值判断的正确性和其他方法可用性
 TEST_F(TableSelectTest, TestSelect2) {
     try {
-        unique_ptr<SessionDataSet> dataSet1 = tableSession_TableSelect->executeQueryStatement("select time,tag1,tag2,attr1,attr2,boolean,int32,int64,float,double,text,string,blob,date,timestamp from " + TABLE_NAME_TableSelect + " order by time");
+        unique_ptr<SessionDataSet> dataSet1 = session_select_test->executeQueryStatement("select time,tag1,tag2,attr1,attr2,boolean,int32,int64,float,double,text,string,blob,date,timestamp from " + TABLE_NAME_TableSelect + " order by time");
         auto dataIterator1 = dataSet1->getIterator();
         // 1、验证列名正确性
         auto getColumnNames = dataIterator1.getColumnNames();
@@ -464,7 +464,7 @@ TEST_F(TableSelectTest, TestSelect2) {
             }
         }
         // 4、验证同种数据类型通过索引和通过列名返回值一致性
-        unique_ptr<SessionDataSet> dataSet2 = tableSession_TableSelect->executeQueryStatement("select time,tag1,tag2,attr1,attr2,boolean,int32,int64,float,double,text,string,blob,date,timestamp from " + TABLE_NAME_TableSelect + " order by time");
+        unique_ptr<SessionDataSet> dataSet2 = session_select_test->executeQueryStatement("select time,tag1,tag2,attr1,attr2,boolean,int32,int64,float,double,text,string,blob,date,timestamp from " + TABLE_NAME_TableSelect + " order by time");
         auto dataIterator2 = dataSet2->getIterator();
         while (dataIterator2.next()) {
             if (dataIterator2.isNullByIndex(1) == 1) {
@@ -544,7 +544,7 @@ TEST_F(TableSelectTest, TestSelect2) {
             }
         }
         // 5、验证是否为空值判断的正确性
-        unique_ptr<SessionDataSet> dataSet3 = tableSession_TableSelect->executeQueryStatement("select time,tag1,tag2,attr1,attr2,boolean,int32,int64,float,double,text,string,blob,date,timestamp from " + TABLE_NAME_TableSelect + " order by time");
+        unique_ptr<SessionDataSet> dataSet3 = session_select_test->executeQueryStatement("select time,tag1,tag2,attr1,attr2,boolean,int32,int64,float,double,text,string,blob,date,timestamp from " + TABLE_NAME_TableSelect + " order by time");
         auto dataIterator3 = dataSet3->getIterator();
         while (dataIterator3.next()) {
             ASSERT_EQ(dataIterator3.isNullByIndex(1), dataIterator3.isNull("time")) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator3.isNullByIndex(1) << ", Actual: " << dataIterator3.isNull("time") << std::endl;
@@ -564,7 +564,7 @@ TEST_F(TableSelectTest, TestSelect2) {
             ASSERT_EQ(dataIterator3.isNullByIndex(15), dataIterator3.isNull("timestamp")) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator3.isNullByIndex(15) << ", Actual: " << dataIterator3.isNull("timestamp") << std::endl;
         }
         // 6、验证其他方法可用性：findColumn
-        unique_ptr<SessionDataSet> dataSet4 = tableSession_TableSelect->executeQueryStatement("select time,tag1,tag2,attr1,attr2,boolean,int32,int64,float,double,text,string,blob,date,timestamp from " + TABLE_NAME_TableSelect + " order by time");
+        unique_ptr<SessionDataSet> dataSet4 = session_select_test->executeQueryStatement("select time,tag1,tag2,attr1,attr2,boolean,int32,int64,float,double,text,string,blob,date,timestamp from " + TABLE_NAME_TableSelect + " order by time");
         auto dataIterator4 = dataSet4->getIterator();
         ASSERT_EQ(1, dataIterator3.findColumn("time")) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: 1, Actual: " << dataIterator3.findColumn("time") << std::endl;
         ASSERT_EQ(2, dataIterator3.findColumn("tag1")) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: 2, Actual: " << dataIterator3.findColumn("tag1") << std::endl;
