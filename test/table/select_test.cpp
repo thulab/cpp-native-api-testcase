@@ -497,7 +497,7 @@ TEST_F(TableSelectTest, TestSelect2) {
                                 ASSERT_EQ(dataIterator1.getLongByIndex(column+2).is_initialized(), 0) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator1.getLongByIndex(column+2).is_initialized() << ", Actual: " << 0 << std::endl;
                                 break;
                             case TSDataType::TIMESTAMP:
-                                // ASSERT_EQ(dataIterator1.getTimestampByIndex(column+2).is_initialized(), 0) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator1.getTimestampByIndex(column+2).is_initialized() << ", Actual: " << 0 << std::endl;
+                                ASSERT_EQ(dataIterator1.getTimestampByIndex(column+2).is_initialized(), 0) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator1.getTimestampByIndex(column+2).is_initialized() << ", Actual: " << 0 << std::endl;
                             break;
                             case TSDataType::FLOAT:
                                 ASSERT_EQ(dataIterator1.getFloatByIndex(column+2).is_initialized(), 0) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator1.getFloatByIndex(column+2).is_initialized() << ", Actual: " << 0 << std::endl;
@@ -591,7 +591,7 @@ TEST_F(TableSelectTest, TestSelect2) {
                 ASSERT_EQ(dataIterator2.getDateByIndex(14).value(), dataIterator2.getDate("date")) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator2.getDateByIndex(14) << ", Actual: " << dataIterator2.getDate("date") << std::endl;
             }
             if (dataIterator2.isNullByIndex(15) == 1) {
-                // ASSERT_EQ(dataIterator2.getTimestampByIndex(15).is_initialized(), 0) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator2.getTimestampByIndex(15) << ", Actual: " << 0 << std::endl;
+                ASSERT_EQ(dataIterator2.getTimestampByIndex(15).is_initialized(), 0) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator2.getTimestampByIndex(15) << ", Actual: " << 0 << std::endl;
             } else {
                 ASSERT_EQ(dataIterator2.getTimestampByIndex(15).value(), dataIterator2.getTimestamp("timestamp")) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator2.getTimestampByIndex(15) << ", Actual: " << dataIterator2.getTimestamp("timestamp") << std::endl;
             }
