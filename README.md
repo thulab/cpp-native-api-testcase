@@ -4,6 +4,8 @@
 
 ## 一、介绍
 
+本程序是基于开源版IoTDB C++客户端API进行测试的程序
+
 ### 1、目录
 
 ```txt
@@ -27,11 +29,12 @@
 # 拉取
 git clone https://github.com/apache/iotdb.git
 cd iotdb
-# 编译c++（glibc 版本 >= 2.17 的 Linux，更多平台编译详见IoTDB官网）
+# 编译c++（基于Centos7，glibc 版本 >= 2.17 的 Linux，更多平台编译详见IoTDB官网文档：https://iotdb.apache.org/zh/UserGuide/latest/API/Programming-Cpp-Native-API.html#_2-2-%E6%89%A7%E8%A1%8C%E7%BC%96%E8%AF%91）
 ./mvnw clean package -pl example/client-cpp-example -am -DskipTests -P with-cpp -Diotdb-tools-thrift.version=0.14.1.1-glibc223-SNAPSHOT
+# Ubuntu22版本（glibc 版本 >= 2.31）：./mvnw clean package -pl example/client-cpp-example -am -DskipTests -P with-cpp -Diotdb-tools-thrift.version=0.14.1.1-old-glibc-SNAPSHOT
 # 存放头文件和库文件
-头文件位于：iotdb-client/client-cpp/target/client-cpp-2.0.5-SNAPSHOT-cpp-linux-x86_64/include下，存放到Cpp-Session-Test/client/include下
-库文件位于：iotdb-client/client-cpp/target/client-cpp-2.0.5-SNAPSHOT-cpp-linux-x86_64/lib下，存放到Cpp-Session-Test/client/lib下
+头文件位于：iotdb-client/client-cpp/target/client-cpp-*-SNAPSHOT-cpp-linux-x86_64/include下，存放到测试程序根目录的client/include下
+库文件位于：iotdb-client/client-cpp/target/client-cpp-*-SNAPSHOT-cpp-linux-x86_64/lib下，存放到测试程序根目录的client/lib下
 ```
 
 第一次需要手动编译gtest测试工具生成gtest头文件和库文件，也需要存放到同样地方下

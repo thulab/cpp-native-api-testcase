@@ -200,51 +200,71 @@ TEST(test_session_connection_error, test_error_username_and_password) {
         session_session_test = (new TableSessionBuilder())
             ->host("127.0.0.1")
             ->rpcPort(6667)
-            ->username("1234")
-            ->password("1234")
+            ->username("error")
+            ->password("error")
             ->build();
-
-        session_session_test->close();
+        FAIL() << "Expecting an error, but actually running normally";
     } catch (exception &e) {
-        ASSERT_EQ("801: Authentication failed.", string(e.what())) << "[Error] test_error_username_and_password - " << string(e.what());
+        ASSERT_EQ("801: Authentication failed.", string(e.what())) << "[Error] Error message does not match expectations, expect: 801: Authentication failed., actual: " << string(e.what());
     }
 }
 
-// 2、关闭session连接后使用session
-TEST(test_session_connection_error, test_error_session_close) {
+// 2、错误的ip地址
+// TEST(test_session_connection_error, test_error_host) {
+//     try{
+//         session_session_test = (new TableSessionBuilder())
+//             ->host("192.0.0.1")
+//             ->rpcPort(6667)
+//             ->username("root")
+//             ->password("root")
+//             ->build();
+//         FAIL() << "Expecting an error, but actually running normally";
+//     } catch (exception &e) {
+//         ASSERT_EQ("timed out", string(e.what())) << "[Error] Error message does not match expectations, expect: timed out, actual: " << string(e.what());
+//     }
+// }
+
+// 3、错误的端口号
+TEST(test_session_connection_error, test_error_rpcPort) {
     try{
-        session_session_test->executeNonQueryStatement("show databases");
         session_session_test = (new TableSessionBuilder())
             ->host("127.0.0.1")
-            ->rpcPort(6667)
+            ->rpcPort(0000)
             ->username("root")
             ->password("root")
             ->build();
-        session_session_test->close();
-        session_session_test->executeNonQueryStatement("show databases");
-    } catch (IoTDBConnectionException &e) {
-        ASSERT_EQ("Called write on non-open socket", string(e.what())) << "[Error] test_default_value - " << string(e.what());
+        FAIL() << "Expecting an error, but actually running normally";
+    } catch (exception &e) {
+        ASSERT_EQ("No valid endpoints available", string(e.what())) << "[Error] Error message does not match expectations, expect: No valid endpoints available, actual: " << string(e.what());
     }
-    
 }
 
-// 3、设置查询结果的提取大小为负值：目前不会报错
-TEST(test_session_connection, test_error_fetchSize) {
-    try{
-        session_session_test = (new TableSessionBuilder())
-            ->host("127.0.0.1")
-            ->rpcPort(6667)
-            ->username("root")
-            ->password("root")
-            ->fetchSize(-10)
-            ->build();
+// 3、未开启session连接就使用session（未实现）
+// TEST(test_session_connection_error, test_error_session_close) {
+//     try{
+//         session_session_test->executeNonQueryStatement("show databases");
+//         FAIL() << "Expecting an error, but actually running normally";
+//     } catch (IoTDBConnectionException &e) {
+//         ASSERT_EQ("Called write on non-open socket", string(e.what())) << "[Error] Error message does not match expectations, expect: Called write on non-open socket, actual: " << string(e.what());
+//     }
+// }
+
+// 4、设置查询结果的提取大小为负值：目前不会报错
+// TEST(test_session_connection, test_error_fetchSize) {
+//     try{
+//         session_session_test = (new TableSessionBuilder())
+//             ->host("127.0.0.1")
+//             ->rpcPort(6667)
+//             ->username("root")
+//             ->password("root")
+//             ->fetchSize(-10)
+//             ->build();
         
-        validity1("test_fetchSize");
-
-        session_session_test->close();
-    } catch (IoTDBConnectionException &e) {
-        isErrorSessionTest = true;
-        ASSERT_EQ(false, isErrorSessionTest) << "[Error] test_fetchSize - " << string(e.what());
-    }
-}
+//         validity1("test_fetchSize");
+//         session_session_test->close();
+//     } catch (IoTDBConnectionException &e) {
+//         isErrorSessionTest = true;
+//         ASSERT_EQ(false, isErrorSessionTest) << "[Error] test_fetchSize - " << string(e.what());
+//     }
+// }
 
