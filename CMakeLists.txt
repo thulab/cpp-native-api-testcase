@@ -26,6 +26,13 @@ IF (DEFINED BOOST_INCLUDEDIR)
     include_directories("${Boost_INCLUDE_DIR}")
 ENDIF()
 
+# 链接 ASan 库
+IF(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND NOT MSVC)
+    add_compile_options(-fsanitize=address -fno-omit-frame-pointer)
+    add_link_options(-fsanitize=address -lasan)
+ENDIF()
+
+
 # 指定库文件的目录
 LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/client/lib)
 
