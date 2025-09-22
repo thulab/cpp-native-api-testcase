@@ -18,7 +18,7 @@
 
 using namespace std;
 
-TableSession *session_select_test; // 作为全局的session变量
+shared_ptr<TableSession> session_select_test; // 作为全局的session变量
 bool isErrorTest_select_test = false; // 用于确认是否出错的标识
 int expectNum_select_test = 0; // 用于记录插入期待的行数
 int actualNum_select_test = 0; // 用于记录实际查询的行数

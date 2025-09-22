@@ -10,7 +10,7 @@
 
 using namespace std;
 
-TableSession *session1; // 作为全局的session变量
+shared_ptr<TableSession> session1; // 作为全局的session变量
 bool isErrorInsertTest = false; // 用于确认是否出错的标识
 int expectNum = 0; // 用于记录插入期待的行数
 int actualNum = 0; // 用于记录实际查询的行数

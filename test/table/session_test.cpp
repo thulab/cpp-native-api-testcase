@@ -6,7 +6,7 @@
 
 using namespace std;
 
-TableSession *session_session_test;
+shared_ptr<TableSession> session_session_test;
 bool isErrorSessionTest = false;
 
 /*
