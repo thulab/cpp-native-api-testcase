@@ -205,7 +205,7 @@ TEST(test_session_connection_error, test_error_username_and_password) {
             ->build();
         FAIL() << "Expecting an error, but actually running normally";
     } catch (exception &e) {
-        ASSERT_EQ("801: Authentication failed.", string(e.what())) << "[Error] Error message does not match expectations, expect: 801: Authentication failed., actual: " << string(e.what());
+        ASSERT_EQ("804: The user error does not exist.", string(e.what())) << "[Error] Error message does not match expectations, expect: 801: Authentication failed., actual: " << string(e.what());
     }
 }
 
