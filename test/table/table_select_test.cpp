@@ -177,12 +177,15 @@ class TableSelectTest : public ::testing::Test {
         void SetUp() override {
             // 初始化操作
             try {
-                session_select_test = (new TableSessionBuilder())
+                auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
+                session_select_test =std::shared_ptr<TableSession>(
+                    builder
                     ->host("127.0.0.1")
                     ->rpcPort(6667)
                     ->username("root")
                     ->password("root")
-                    ->build();
+                    ->build()
+                );
                 session_select_test->executeNonQueryStatement("drop database if exists " + database_name_select_test);
                 session_select_test->executeNonQueryStatement("create database " + database_name_select_test);
                 session_select_test->executeNonQueryStatement("use " + database_name_select_test);

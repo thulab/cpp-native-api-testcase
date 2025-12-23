@@ -12,8 +12,14 @@
 ├── assert                      // 静态资源目录
 ├── build                       // 编译和生成可执行文件目录
 ├── client                      // 头文件和库文件目录
+├── data                        // 测试数据目录
+|   ├── table                   // 表模型测试数据目录
+|   ├── tree                    // 树模型测试数据目录
 ├── test                        // 测试代码目录
+|   ├── table                   // 表模型测试用例目录
+|   ├── tree                    // 树模型测试用例目录
 |   ├── CMakeLists.txt          // 测试代码目录的配置文件
+|   ├── main.cpp                // 测试程序入口文件
 ├── CMakeLists.txt              // 主配置文件
 ├── CMakePresets.json           // CMake项目构建配置文件
 ├── compile.sh                  // 编译脚本
