@@ -35,9 +35,7 @@
 # 拉取
 git clone https://github.com/apache/iotdb.git
 cd iotdb
-# 编译c++（基于Centos7，glibc 版本 >= 2.17 的 Linux，更多平台编译详见IoTDB官网文档：https://iotdb.apache.org/zh/UserGuide/latest/API/Programming-Cpp-Native-API.html#_2-2-%E6%89%A7%E8%A1%8C%E7%BC%96%E8%AF%91）
-./mvnw clean package -pl example/client-cpp-example -am -DskipTests -P with-cpp -Diotdb-tools-thrift.version=0.14.1.1-glibc223-SNAPSHOT
-# Ubuntu22版本（glibc 版本 >= 2.31）：./mvnw clean package -pl example/client-cpp-example -am -DskipTests -P with-cpp -Diotdb-tools-thrift.version=0.14.1.1-old-glibc-SNAPSHOT
+./mvnw clean package -pl example/client-cpp-example -am -DskipTests -P with-cpp
 # 存放头文件和库文件
 头文件位于：iotdb-client/client-cpp/target/client-cpp-*-SNAPSHOT-cpp-linux-x86_64/include下，存放到测试程序根目录的client/include下
 库文件位于：iotdb-client/client-cpp/target/client-cpp-*-SNAPSHOT-cpp-linux-x86_64/lib下，存放到测试程序根目录的client/lib下
