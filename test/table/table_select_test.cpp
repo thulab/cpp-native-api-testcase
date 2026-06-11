@@ -9,7 +9,6 @@
 #include "gtest/gtest.h"
 #include <string>
 #include <fstream>
-#include <boost/optional/optional_io.hpp>
 
 /*
  * 标题：表模型查询相关接口功能测试
@@ -17,6 +16,29 @@
  */
 
 using namespace std;
+
+// ==== 适配新 IoTDB C++ SDK：旧用例依赖 boost::optional 提供的 ==/<< ====
+// 新 SDK 的 Optional<T>（client/include/Optional.h）无 value_or/operator==/operator<<；
+// date 由 boost::gregorian::date 改为 IoTDBDate（无 operator<<）。以下补回测试所需运算符（全局，供 gtest ADL 找到）。
+inline std::ostream& operator<<(std::ostream& os, const IoTDBDate& d) { return os << d.toIsoExtendedString(); }
+template <typename T> std::ostream& operator<<(std::ostream& os, const Optional<T>& o) {
+    return o.has_value() ? (os << o.value()) : (os << "null");
+}
+template <typename T> bool operator==(const Optional<T>& a, const T& b) { return a.has_value() && a.value() == b; }
+template <typename T> bool operator==(const T& a, const Optional<T>& b) { return b.has_value() && a == b.value(); }
+template <typename T> bool operator==(const Optional<T>& a, const Optional<T>& b) {
+    return a.has_value() == b.has_value() && (!a.has_value() || a.value() == b.value());
+}
+// boost::gregorian::date 已不再可用，date 字符串("YYYY-MM-DD")直接构造 IoTDBDate
+inline IoTDBDate toIoTDBDate(const std::string& s) { // s 形如 2025-1-1 或 2025-01-01
+    size_t p1 = s.find('-'), p2 = s.find('-', p1 + 1);
+    int y = std::stoi(s.substr(0, p1));
+    int m = std::stoi(s.substr(p1 + 1, p2 - p1 - 1));
+    int d = std::stoi(s.substr(p2 + 1));
+    return IoTDBDate(y, m, d);
+}
+// ==== 适配结束 ====
+
 
 shared_ptr<TableSession> session_select_test; // 作为全局的session变量
 bool isErrorTest_select_test = false; // 用于确认是否出错的标识
@@ -113,7 +135,7 @@ void insertDate_select_test() {
                             tablet.addValue(column, rowIndex, 0.0);
                            break;
                         case TSDataType::DATE:
-                            tablet.addValue(column, rowIndex, boost::gregorian::date(2025, 5, 15));
+                            tablet.addValue(column, rowIndex, IoTDBDate(2025, 5, 15));
                             break;
                         default:
                             throw UnSupportedDataTypeException(string("Data type ") + to_string(schemaList[column].second) + " is not supported!!!");
@@ -144,7 +166,7 @@ void insertDate_select_test() {
                             tablet.addValue(column, rowIndex, stod(result[row][column+1]));
                             break;
                         case TSDataType::DATE:
-                            tablet.addValue(column, rowIndex, boost::gregorian::from_string(result[row][column+1]));
+                            tablet.addValue(column, rowIndex, toIoTDBDate(result[row][column+1]));
                             break;
                         default:
                             throw UnSupportedDataTypeException(string("Data type ") + to_string(schemaList[column].second) + " is not supported!!!");
@@ -324,7 +346,7 @@ TEST_F(TableSelectTest, TestSelect1) {
                         ASSERT_EQ(rowRecord->fields[column+1].doubleV.value(), stod(result[row][column+1])) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << rowRecord->fields[column+1].doubleV.value() << ", Actual: " << stod(result[row][column+1]) << std::endl;
                         break;
                     case TSDataType::DATE:
-                        ASSERT_EQ(rowRecord->fields[column+1].dateV.value() , boost::gregorian::from_string(result[row][column+1])) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << rowRecord->fields[13].dateV.value()  << ", Actual: " << boost::gregorian::from_string(result[row][column+1]) << std::endl;
+                        ASSERT_EQ(rowRecord->fields[column+1].dateV.value() , toIoTDBDate(result[row][column+1])) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << rowRecord->fields[13].dateV.value()  << ", Actual: " << toIoTDBDate(result[row][column+1]) << std::endl;
                         break;
                     default:
                         isErrorTest_select_test = true;
@@ -336,26 +358,26 @@ TEST_F(TableSelectTest, TestSelect1) {
                         case TSDataType::TEXT:
                         case TSDataType::STRING:
                         case TSDataType::BLOB:
-                            ASSERT_EQ(rowRecord->fields[column+1].stringV.value_or("null"), "null") << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << rowRecord->fields[column+1].stringV.value_or("null") << ", Actual: null" << std::endl;
+                            ASSERT_EQ((rowRecord->fields[column+1].stringV.has_value() ? rowRecord->fields[column+1].stringV.value() : "null"), "null") << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << (rowRecord->fields[column+1].stringV.has_value() ? rowRecord->fields[column+1].stringV.value() : "null") << ", Actual: null" << std::endl;
                             break;
                         case TSDataType::BOOLEAN:
-                            ASSERT_EQ(rowRecord->fields[column+1].boolV.value_or(false), false) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << rowRecord->fields[column+1].boolV.value_or(false) << ", Actual: false" << std::endl;
+                            ASSERT_EQ((rowRecord->fields[column+1].boolV.has_value() ? rowRecord->fields[column+1].boolV.value() : false), false) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << (rowRecord->fields[column+1].boolV.has_value() ? rowRecord->fields[column+1].boolV.value() : false) << ", Actual: false" << std::endl;
                             break;
                         case TSDataType::INT32:
-                            ASSERT_EQ(rowRecord->fields[column+1].intV.value_or(0), 0) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << rowRecord->fields[column+1].intV.value_or(0) << ", Actual: 0" << std::endl;
+                            ASSERT_EQ((rowRecord->fields[column+1].intV.has_value() ? rowRecord->fields[column+1].intV.value() : 0), 0) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << (rowRecord->fields[column+1].intV.has_value() ? rowRecord->fields[column+1].intV.value() : 0) << ", Actual: 0" << std::endl;
                             break;
                         case TSDataType::INT64:
                         case TSDataType::TIMESTAMP:
-                            ASSERT_EQ(rowRecord->fields[column+1].longV.value_or(0L), 0L) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << rowRecord->fields[column+1].longV.value_or(0L) << ", Actual: 0" << std::endl;
+                            ASSERT_EQ((rowRecord->fields[column+1].longV.has_value() ? rowRecord->fields[column+1].longV.value() : 0L), 0L) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << (rowRecord->fields[column+1].longV.has_value() ? rowRecord->fields[column+1].longV.value() : 0L) << ", Actual: 0" << std::endl;
                             break;
                         case TSDataType::FLOAT:
-                            ASSERT_EQ(rowRecord->fields[column+1].floatV.value_or(0.0F), 0.0F) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << rowRecord->fields[column+1].floatV.value_or(0.0F) << ", Actual: 0.0F" << std::endl;
+                            ASSERT_EQ((rowRecord->fields[column+1].floatV.has_value() ? rowRecord->fields[column+1].floatV.value() : 0.0F), 0.0F) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << (rowRecord->fields[column+1].floatV.has_value() ? rowRecord->fields[column+1].floatV.value() : 0.0F) << ", Actual: 0.0F" << std::endl;
                             break;
                         case TSDataType::DOUBLE:
-                            ASSERT_EQ(rowRecord->fields[column+1].doubleV.value_or(0.0), 0.0) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << rowRecord->fields[column+1].doubleV.value_or(0.0) << ", Actual: 0.0" << std::endl;
+                            ASSERT_EQ((rowRecord->fields[column+1].doubleV.has_value() ? rowRecord->fields[column+1].doubleV.value() : 0.0), 0.0) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << (rowRecord->fields[column+1].doubleV.has_value() ? rowRecord->fields[column+1].doubleV.value() : 0.0) << ", Actual: 0.0" << std::endl;
                             break;
                         case TSDataType::DATE:
-                            ASSERT_EQ(rowRecord->fields[column+1].dateV.value_or(boost::gregorian::date(1970, 1, 2)), boost::gregorian::date(1970, 1, 2)) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << rowRecord->fields[column+1].dateV.value_or(boost::gregorian::date(1970, 1, 2)) << ", Actual: " << boost::gregorian::date(1970, 1, 2) << std::endl;
+                            ASSERT_EQ((rowRecord->fields[column+1].dateV.has_value() ? rowRecord->fields[column+1].dateV.value() : IoTDBDate(1970, 1, 2)), IoTDBDate(1970, 1, 2)) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << (rowRecord->fields[column+1].dateV.has_value() ? rowRecord->fields[column+1].dateV.value() : IoTDBDate(1970, 1, 2)) << ", Actual: " << IoTDBDate(1970, 1, 2) << std::endl;
                             break;
                         default:
                             isErrorTest_select_test = true;
@@ -476,7 +498,7 @@ TEST_F(TableSelectTest, TestSelect2) {
                             ASSERT_EQ(dataIterator1.getDoubleByIndex(column+2), stod(result[row][column+1])) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator1.getDoubleByIndex(column+2) << ", Actual: " << stod(result[row][column+1]) << std::endl;
                             break;
                         case TSDataType::DATE:
-                            ASSERT_EQ(dataIterator1.getDateByIndex(column+2), boost::gregorian::from_string(result[row][column+1])) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator1.getDateByIndex(column+2) << ", Actual: " << boost::gregorian::from_string(result[row][column+1]) << std::endl;
+                            ASSERT_EQ(dataIterator1.getDateByIndex(column+2), toIoTDBDate(result[row][column+1])) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator1.getDateByIndex(column+2) << ", Actual: " << toIoTDBDate(result[row][column+1]) << std::endl;
                             break;
                         default:
                             isErrorTest_select_test = true;
@@ -591,7 +613,7 @@ TEST_F(TableSelectTest, TestSelect2) {
             if (dataIterator2.isNullByIndex(14) == 1) {
                 ASSERT_EQ(dataIterator2.getDateByIndex(14).is_initialized(), 0) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator2.getDateByIndex(14) << ", Actual: " << 0 << std::endl;
             } else {
-                ASSERT_EQ(dataIterator2.getDateByIndex(14).value(), dataIterator2.getDate("date")) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator2.getDateByIndex(14) << ", Actual: " << dataIterator2.getDate("date") << std::endl;
+                ASSERT_EQ(dataIterator2.getDateByIndex(14), dataIterator2.getDate("date")) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator2.getDateByIndex(14) << ", Actual: " << dataIterator2.getDate("date") << std::endl;
             }
             if (dataIterator2.isNullByIndex(15) == 1) {
                 ASSERT_EQ(dataIterator2.getTimestampByIndex(15).is_initialized(), 0) << "[FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator2.getTimestampByIndex(15) << ", Actual: " << 0 << std::endl;

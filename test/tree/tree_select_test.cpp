@@ -9,7 +9,6 @@
 #include "gtest/gtest.h"
 #include <string>
 #include <fstream>
-#include <boost/optional/optional_io.hpp>
 
 /*
  * 测试用例标题：测试树模型查询操作
@@ -18,6 +17,29 @@
  */
 
 using namespace std;
+
+// ==== 适配新 IoTDB C++ SDK：旧用例依赖 boost::optional 提供的 ==/<< ====
+// 新 SDK 的 Optional<T>（client/include/Optional.h）无 value_or/operator==/operator<<；
+// date 由 boost::gregorian::date 改为 IoTDBDate（无 operator<<）。以下补回测试所需运算符（全局，供 gtest ADL 找到）。
+inline std::ostream& operator<<(std::ostream& os, const IoTDBDate& d) { return os << d.toIsoExtendedString(); }
+template <typename T> std::ostream& operator<<(std::ostream& os, const Optional<T>& o) {
+    return o.has_value() ? (os << o.value()) : (os << "null");
+}
+template <typename T> bool operator==(const Optional<T>& a, const T& b) { return a.has_value() && a.value() == b; }
+template <typename T> bool operator==(const T& a, const Optional<T>& b) { return b.has_value() && a == b.value(); }
+template <typename T> bool operator==(const Optional<T>& a, const Optional<T>& b) {
+    return a.has_value() == b.has_value() && (!a.has_value() || a.value() == b.value());
+}
+// boost::gregorian::date 已不再可用，date 字符串("YYYY-MM-DD")直接构造 IoTDBDate
+inline IoTDBDate toIoTDBDate(const std::string& s) { // s 形如 2025-1-1 或 2025-01-01
+    size_t p1 = s.find('-'), p2 = s.find('-', p1 + 1);
+    int y = std::stoi(s.substr(0, p1));
+    int m = std::stoi(s.substr(p1 + 1, p2 - p1 - 1));
+    int d = std::stoi(s.substr(p2 + 1));
+    return IoTDBDate(y, m, d);
+}
+// ==== 适配结束 ====
+
 
 shared_ptr<Session> treeSession_TreeSelect; // 作为全局的session变量
 bool isErrorTest_TreeSelect = false; // 用于确认是否出错的标识
@@ -114,7 +136,7 @@ void insertDate_TreeSelect() {
                             tablet.addValue(column, rowIndex, 0.0);
                            break;
                         case TSDataType::DATE:
-                            tablet.addValue(column, rowIndex, boost::gregorian::date(2025, 5, 15));
+                            tablet.addValue(column, rowIndex, IoTDBDate(2025, 5, 15));
                             break;
                         default:
                             throw UnSupportedDataTypeException(string("Data type ") + to_string(schemaList[column].second) + " is not supported!!!");
@@ -145,7 +167,7 @@ void insertDate_TreeSelect() {
                             tablet.addValue(column, rowIndex, stod(result[row][column+1]));
                             break;
                         case TSDataType::DATE:
-                            tablet.addValue(column, rowIndex, boost::gregorian::from_string(result[row][column+1]));
+                            tablet.addValue(column, rowIndex, toIoTDBDate(result[row][column+1]));
                             break;
                         default:
                             throw UnSupportedDataTypeException(string("Data type ") + to_string(schemaList[column].second) + " is not supported!!!");
@@ -408,7 +430,7 @@ TEST_F(TreeSelectTest, TestSelect2) {
                             ASSERT_EQ(dataIterator1.getDoubleByIndex(column+2), stod(result[row][column+1])) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator1.getDoubleByIndex(column+2) << ", Actual: " << stod(result[row][column+1]) << std::endl;
                             break;
                         case TSDataType::DATE:
-                            ASSERT_EQ(dataIterator1.getDateByIndex(column+2), boost::gregorian::from_string(result[row][column+1])) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator1.getDateByIndex(column+2) << ", Actual: " << boost::gregorian::from_string(result[row][column+1]) << std::endl;
+                            ASSERT_EQ(dataIterator1.getDateByIndex(column+2), toIoTDBDate(result[row][column+1])) << "[TestSelect1 FAIL] Expected value and actual value are inconsistent," << " Expected: " << dataIterator1.getDateByIndex(column+2) << ", Actual: " << toIoTDBDate(result[row][column+1]) << std::endl;
                             break;
                         default:
                             isErrorTest_TreeSelect = true;

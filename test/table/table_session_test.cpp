@@ -6,6 +6,12 @@
 
 using namespace std;
 
+// 适配新 SDK：Optional<T> 无 value_or，提供等价 helper（单次求值，避免 next() 重复推进游标）
+static inline std::string optStr(const Optional<std::string>& o, const std::string& d) {
+    return o.has_value() ? o.value() : d;
+}
+
+
 bool isErrorSessionTest = false;
 
 /*
@@ -21,18 +27,18 @@ void validity1(const string& caseName, shared_ptr<TableSession> session) {
         session->executeNonQueryStatement("insert into t1 (tag1, s1) values('string', 'text')");
         unique_ptr<SessionDataSet> dataSet1 = session->executeQueryStatement("show databases");
         while (dataSet1->hasNext()) {
-            string databaseName = dataSet1->next()->fields[0].stringV.value_or("null");
+            string databaseName = optStr(dataSet1->next()->fields[0].stringV, "null");
             if (databaseName != "information_schema") {
                 ASSERT_EQ("table_session_test1", databaseName) << "The database name is incorrect";
             }
         }
         unique_ptr<SessionDataSet> dataSet2 = session->executeQueryStatement("show tables");
         while (dataSet2->hasNext()) {
-            ASSERT_EQ("t1", dataSet2->next()->fields[0].stringV.value_or("null")) << "The Table name is incorrect";
+            ASSERT_EQ("t1", optStr(dataSet2->next()->fields[0].stringV, "null")) << "The Table name is incorrect";
         }
         unique_ptr<SessionDataSet> dataSet3 = session->executeQueryStatement("select s1 from t1");
         while (dataSet3->hasNext()) {
-            ASSERT_EQ("text", dataSet3->next()->fields[0].stringV.value_or("null")) << "The Data is incorrect";
+            ASSERT_EQ("text", optStr(dataSet3->next()->fields[0].stringV, "null")) << "The Data is incorrect";
         }
         session->executeNonQueryStatement("drop table t1");
         session->executeNonQueryStatement("drop DATABASE table_session_test1");
@@ -50,18 +56,18 @@ void validity2(const string& caseName, shared_ptr<TableSession> session) {
         session->executeNonQueryStatement("insert into t1 (tag1, s1) values('string', 'text')");
         unique_ptr<SessionDataSet> dataSet1 = session->executeQueryStatement("show databases");
         while (dataSet1->hasNext()) {
-            string databaseName = dataSet1->next()->fields[0].stringV.value_or("null");
+            string databaseName = optStr(dataSet1->next()->fields[0].stringV, "null");
             if (databaseName != "information_schema") {
                 ASSERT_EQ("table_session_test2", databaseName) << "[Error] " << caseName << ": The database name is incorrect";
             }
         }
         unique_ptr<SessionDataSet> dataSet2 = session->executeQueryStatement("show tables");
         while (dataSet2->hasNext()) {
-            ASSERT_EQ("t1", dataSet2->next()->fields[0].stringV.value_or("null")) << "[Error] " << caseName << ": The Table name is incorrect";
+            ASSERT_EQ("t1", optStr(dataSet2->next()->fields[0].stringV, "null")) << "[Error] " << caseName << ": The Table name is incorrect";
         }
         unique_ptr<SessionDataSet> dataSet3 = session->executeQueryStatement("select s1 from t1");
         while (dataSet3->hasNext()) {
-            ASSERT_EQ("text", dataSet3->next()->fields[0].stringV.value_or("null")) << "[Error] " << caseName << ": The Data is incorrect";
+            ASSERT_EQ("text", optStr(dataSet3->next()->fields[0].stringV, "null")) << "[Error] " << caseName << ": The Data is incorrect";
         }
         session->executeNonQueryStatement("drop table t1");
         session->executeNonQueryStatement("drop DATABASE table_session_test2");
