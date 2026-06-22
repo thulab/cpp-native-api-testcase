@@ -20,6 +20,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <cstdlib>
 
 /*
  * 测试用例标题：模型推理结果读取（覆盖 V2-917）
@@ -40,13 +41,19 @@
 
 using namespace std;
 
-// ==== 连接参数（按环境修改） ====
-// 注：本验证环境中 C++ 客户端经 SSH 隧道连接被测 IoTDB（127.0.0.1:16667 -> 被测库 6667），
-// 被测库需已部署并注册 AINode（含内置时序大模型，如 timer_xl）。
-static const char* kHost = "127.0.0.1";
-static const int   kPort = 16667;
-static const char* kUser = "root";
-static const char* kPass = "TimechoDB@2021";
+// ==== 连接参数（默认开源单机 127.0.0.1:6667/root/root，可用环境变量覆盖）====
+// 经 SSH 隧道连企业版被测库时，用环境变量传入即可，无需改源码并重编：
+//   IOTDB_HOST / IOTDB_PORT / IOTDB_USER / IOTDB_PASSWORD
+//   例：IOTDB_PORT=16667 IOTDB_PASSWORD=TimechoDB@2021 ./main
+// （被测库仍需已部署并注册 AINode，含内置时序大模型，如 timer_xl）
+static string envOr(const char* key, const string& def) {
+    const char* v = std::getenv(key);
+    return (v && *v) ? string(v) : def;
+}
+static const string kHost = envOr("IOTDB_HOST", "127.0.0.1");
+static const int    kPort = std::stoi(envOr("IOTDB_PORT", "6667"));
+static const string kUser = envOr("IOTDB_USER", "root");
+static const string kPass = envOr("IOTDB_PASSWORD", "root");
 
 // 测试数据库与序列
 static const string DB_917 = "root.model_infer_917";
@@ -59,7 +66,7 @@ static const string MODEL_917 = "timer_xl";
 static const int PREDICT_LEN_917 = 10;
 
 shared_ptr<Session> session_917;
-bool isErrorTest_917 = false;
+bool setupOk_917 = false;  // SetUp 是否成功建连+建库
 
 static string inferenceSql_917() {
     return "CALL INFERENCE(" + MODEL_917 + ", \"select s1 from " + DEVICE_917 +
@@ -69,6 +76,8 @@ static string inferenceSql_917() {
 class ModelInferenceGetDoubleTest : public ::testing::Test {
 protected:
     void SetUp() override {
+        // 连接/建库失败时 GTEST_SKIP 跳过本用例（典型：环境无 AINode 或库不可达），
+        // 而非断言失败后留下空 session —— 避免 TearDown 在空/失效 session 上崩溃。
         try {
             session_917 = make_shared<Session>(kHost, kPort, kUser, kPass);
             session_917->open(false);
@@ -87,19 +96,21 @@ protected:
                 if (t != POINT_NUM_917) sql += ",";
             }
             session_917->executeNonQueryStatement(sql);
-        } catch (IoTDBConnectionException& e) {
-            isErrorTest_917 = true;
-            ASSERT_EQ(false, isErrorTest_917) << "[Error] IoTDBConnectionException - " << string(e.what());
-        } catch (IoTDBException& e) {
-            isErrorTest_917 = true;
-            ASSERT_EQ(false, isErrorTest_917) << "[Error] IoTDBException - " << string(e.what());
+            setupOk_917 = true;
         } catch (exception& e) {
-            isErrorTest_917 = true;
-            ASSERT_EQ(false, isErrorTest_917) << "[Error] exception - " << string(e.what());
+            // 连不上/建库失败：清掉可能半初始化的 session，跳过用例（不污染后续、不触发空指针）
+            session_917.reset();
+            setupOk_917 = false;
+            GTEST_SKIP() << "[SKIP] 模型推理环境不可用（需被测库注册 AINode/timer_xl 且可连接）: "
+                         << string(e.what());
         }
     }
 
     void TearDown() override {
+        // 空指针/状态保护：SetUp 跳过或 session 未建立时不做任何清理，避免空指针 SEGV。
+        if (!setupOk_917 || !session_917) {
+            return;
+        }
         try {
             session_917->executeNonQueryStatement("delete database " + DB_917);
             session_917->close();
@@ -107,12 +118,14 @@ protected:
             // 清理失败不阻断
             cerr << "[TearDown] " << string(e.what()) << endl;
         }
+        session_917.reset();
     }
 };
 
 // 一、复刻客户路径：CALL INFERENCE 后按 next()->toString() 迭代整张结果集，必须不抛
 // "Unsupported operation: getDouble"（修复前此处崩溃）。
 TEST_F(ModelInferenceGetDoubleTest, TestInferenceToStringNotThrow) {
+    ASSERT_TRUE(session_917 != nullptr) << "[SKIP/防御] session 未建立";
     int rowCount = 0;
     try {
         unique_ptr<SessionDataSet> dataSet = session_917->executeQueryStatement(inferenceSql_917());
@@ -135,6 +148,7 @@ TEST_F(ModelInferenceGetDoubleTest, TestInferenceToStringNotThrow) {
 // 二、显式按 DOUBLE 读取推理结果 output 列：修复后 FloatColumn::getDouble 可用，
 // getDoubleByIndex 不再抛 "Unsupported operation: getDouble"，且能取到有限数值。
 TEST_F(ModelInferenceGetDoubleTest, TestInferenceGetDoubleReadable) {
+    ASSERT_TRUE(session_917 != nullptr) << "[SKIP/防御] session 未建立";
     int rowCount = 0;
     try {
         unique_ptr<SessionDataSet> dataSet = session_917->executeQueryStatement(inferenceSql_917());
