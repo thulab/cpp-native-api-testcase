@@ -81,7 +81,7 @@ protected:
         // 连接/建库失败时 GTEST_SKIP 跳过本用例（典型：环境无 AINode 或库不可达），
         // 而非断言失败后留下空 session —— 避免 TearDown 在空/失效 session 上崩溃。
         try {
-            session_917 = make_shared<Session>(kHost, kPort, kUser, kPass);
+            session_917 = plmTreeSession();
             session_917->open(false);
             // 干净准备：删除可能残留的库，重建并写入 INT64 序列（对应客户测点类型 int64）
             try {

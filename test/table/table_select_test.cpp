@@ -200,7 +200,7 @@ class TableSelectTest : public ::testing::Test {
         void SetUp() override {
             // 初始化操作
             try {
-                auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
+                auto builder = std::unique_ptr<TableSessionBuilder>(plmTableBuilder());
                 session_select_test =std::shared_ptr<TableSession>(
                     builder
                     ->host(plmHost())

@@ -25,7 +25,7 @@ class InsertTest : public ::testing::Test {
         void SetUp() override {
             // 初始化操作
             try {
-                session1 = (new TableSessionBuilder())
+                session1 = (plmTableBuilder())
                     ->host(plmHost())
                     ->rpcPort(plmPort())
                     ->username(plmUser())

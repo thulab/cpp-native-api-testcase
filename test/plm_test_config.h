@@ -3,7 +3,11 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <memory>
 #include <string>
+
+#include "SessionBuilder.h"
+#include "TableSessionBuilder.h"
 
 /**
  * PLM / 本地执行连接参数。
@@ -54,6 +58,24 @@ inline std::string plmUser() {
 
 inline std::string plmPassword() {
     return plmEnv("IOTDB_PASSWORD", "TimechoDB@2021");
+}
+
+/** 表模型 Builder：关闭重定向，避免被服务端导向 K8s 集群内部 DNS。 */
+inline TableSessionBuilder* plmTableBuilder() {
+    auto* builder = new TableSessionBuilder();
+    builder->enableRedirections = false;
+    return builder;
+}
+
+/** 树模型会话：关闭重定向，直接使用平台注入的外部连接地址。 */
+inline std::shared_ptr<Session> plmTreeSession() {
+    auto builder = SessionBuilder();
+    builder.host(plmHost())
+        ->rpcPort(plmPort())
+        ->username(plmUser())
+        ->password(plmPassword())
+        ->enableRedirections(false);
+    return builder.build();
 }
 
 #endif  // PLM_TEST_CONFIG_H

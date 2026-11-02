@@ -83,7 +83,7 @@ void validity2(const string& caseName, shared_ptr<TableSession> session) {
 // 1、参数使用默认值
 TEST(TestSessionConnection, TestDefaultValue) {
     try{
-        auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
+        auto builder = std::unique_ptr<TableSessionBuilder>(plmTableBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
             ->host(plmHost())
@@ -105,7 +105,7 @@ TEST(TestSessionConnection, TestDefaultValue) {
 // 2、指定参数database为大小写数据库
 TEST(TestSessionConnection, TestDatabaseParameter) {
     try{
-        auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
+        auto builder = std::unique_ptr<TableSessionBuilder>(plmTableBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
             ->host(plmHost())
@@ -129,7 +129,7 @@ TEST(TestSessionConnection, TestDatabaseParameter) {
 TEST(TestSessionConnection, TestFetchSizeParameter) {
     // 3.1、设置为1
     try{
-        auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
+        auto builder = std::unique_ptr<TableSessionBuilder>(plmTableBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
             ->host(plmHost())
@@ -149,7 +149,7 @@ TEST(TestSessionConnection, TestFetchSizeParameter) {
     }
     // 3.2、设置为10000
     try{
-        auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
+        auto builder = std::unique_ptr<TableSessionBuilder>(plmTableBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
             ->host(plmHost())
@@ -172,7 +172,7 @@ TEST(TestSessionConnection, TestFetchSizeParameter) {
 // 4、指定参数zoneId
 TEST(TestSessionConnection, TestZoneIdParameter) {
     try{
-        auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
+        auto builder = std::unique_ptr<TableSessionBuilder>(plmTableBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
             ->host(plmHost())
@@ -195,7 +195,7 @@ TEST(TestSessionConnection, TestZoneIdParameter) {
 // 5、使用全部参数
 TEST(TestSessionConnection, TestAllParameter) {
     try{
-        auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
+        auto builder = std::unique_ptr<TableSessionBuilder>(plmTableBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
             ->host(plmHost())
@@ -221,7 +221,7 @@ TEST(TestSessionConnection, TestAllParameter) {
 // 1、错误的用户名或密码
 TEST(TestSessionConnectionError, TestErrorUsernameAndPasswordParameter) {
     try{
-        auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
+        auto builder = std::unique_ptr<TableSessionBuilder>(plmTableBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
             ->host(plmHost())
@@ -239,7 +239,7 @@ TEST(TestSessionConnectionError, TestErrorUsernameAndPasswordParameter) {
 // 2、错误的ip地址
 // TEST(TestSessionConnectionError, TestErrorHostParameter) {
 //     try{
-//         auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
+//         auto builder = std::unique_ptr<TableSessionBuilder>(plmTableBuilder());
 //         auto session =std::shared_ptr<TableSession>(
 //             builder
 //             ->host("192.0.0.1")
@@ -257,7 +257,7 @@ TEST(TestSessionConnectionError, TestErrorUsernameAndPasswordParameter) {
 // 3、错误的端口号
 TEST(TestSessionConnectionError, TestErrorRpcPortParameter) {
     try{
-        auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
+        auto builder = std::unique_ptr<TableSessionBuilder>(plmTableBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
             ->host(plmHost())
