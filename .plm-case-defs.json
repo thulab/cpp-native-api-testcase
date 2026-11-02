@@ -1,0 +1,180 @@
+{
+  "productId": 1,
+  "defaults": {
+    "caseType": "功能测试",
+    "model": "通用",
+    "owner": "肖林捷",
+    "automationType": "session-cpp",
+    "executeMethod": "自动"
+  },
+  "cases": [
+    {
+      "target": "InsertTest.test_all_datatype_null_same_time_and_device_and_device",
+      "name": "C++ 原生｜表模型-写入：同一时间分区同设备写入全类型含空值",
+      "description": "验证同一时间分区同设备写入全类型含空值。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-写入"
+      ]
+    },
+    {
+      "target": "TableSelectTest.TestSelect1",
+      "name": "C++ 原生｜表模型-查询：SessionDataSet 与 RowRecord 字段校验",
+      "description": "验证SessionDataSet 与 RowRecord 字段校验。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-查询"
+      ]
+    },
+    {
+      "target": "TableSelectTest.TestSelect2",
+      "name": "C++ 原生｜表模型-查询：DataIterator 列名/类型/值一致性",
+      "description": "验证DataIterator 列名/类型/值一致性。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-查询"
+      ]
+    },
+    {
+      "target": "TestSessionConnection.TestDefaultValue",
+      "name": "C++ 原生｜表模型-会话：默认参数连接",
+      "description": "验证默认参数连接。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-会话"
+      ]
+    },
+    {
+      "target": "TestSessionConnection.TestDatabaseParameter",
+      "name": "C++ 原生｜表模型-会话：指定 database 参数",
+      "description": "验证指定 database 参数。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-会话"
+      ]
+    },
+    {
+      "target": "TestSessionConnection.TestFetchSizeParameter",
+      "name": "C++ 原生｜表模型-会话：fetchSize 参数",
+      "description": "验证fetchSize 参数。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-会话"
+      ]
+    },
+    {
+      "target": "TestSessionConnection.TestZoneIdParameter",
+      "name": "C++ 原生｜表模型-会话：zoneId 参数",
+      "description": "验证zoneId 参数。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-会话"
+      ]
+    },
+    {
+      "target": "TestSessionConnection.TestAllParameter",
+      "name": "C++ 原生｜表模型-会话：全部参数组合",
+      "description": "验证全部参数组合。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-会话"
+      ]
+    },
+    {
+      "target": "TestSessionConnectionError.TestErrorUsernameAndPasswordParameter",
+      "name": "C++ 原生｜表模型-会话：错误用户名或密码",
+      "description": "验证错误用户名或密码。",
+      "priority": "P2",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-会话"
+      ]
+    },
+    {
+      "target": "TestSessionConnectionError.TestErrorRpcPortParameter",
+      "name": "C++ 原生｜表模型-会话：错误端口",
+      "description": "验证错误端口。",
+      "priority": "P2",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-会话"
+      ]
+    },
+    {
+      "target": "TreeSelectTest.TestSelect1",
+      "name": "C++ 原生｜树模型-查询：SessionDataSet 与 RowRecord 字段校验",
+      "description": "验证SessionDataSet 与 RowRecord 字段校验。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "树模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/树模型-查询"
+      ]
+    },
+    {
+      "target": "TreeSelectTest.TestSelect2",
+      "name": "C++ 原生｜树模型-查询：DataIterator 列名/类型/值一致性",
+      "description": "验证DataIterator 列名/类型/值一致性。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "树模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/树模型-查询"
+      ]
+    },
+    {
+      "target": "ModelInferenceGetDoubleTest.TestInferenceToStringNotThrow",
+      "name": "C++ 原生｜模型推理：CALL INFERENCE 结果集迭代不抛 getDouble",
+      "description": "验证CALL INFERENCE 结果集迭代不抛 getDouble。",
+      "priority": "P2",
+      "caseType": "功能测试",
+      "model": "树模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/模型推理"
+      ]
+    },
+    {
+      "target": "ModelInferenceGetDoubleTest.TestInferenceGetDoubleReadable",
+      "name": "C++ 原生｜模型推理：推理结果 output 列可按 DOUBLE 读取",
+      "description": "验证推理结果 output 列可按 DOUBLE 读取。",
+      "priority": "P2",
+      "caseType": "功能测试",
+      "model": "树模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/模型推理"
+      ]
+    }
+  ]
+}

@@ -17,6 +17,7 @@
 #include <iostream>
 #include <ostream>
 #include "gtest/gtest.h"
+#include "plm_test_config.h"
 #include <string>
 #include <vector>
 #include <cmath>
@@ -53,7 +54,7 @@ static string envOr(const char* key, const string& def) {
 static const string kHost = envOr("IOTDB_HOST", "127.0.0.1");
 static const int    kPort = std::stoi(envOr("IOTDB_PORT", "6667"));
 static const string kUser = envOr("IOTDB_USER", "root");
-static const string kPass = envOr("IOTDB_PASSWORD", "root");
+static const string kPass = envOr("IOTDB_PASSWORD", "TimechoDB@2021");
 
 // 测试数据库与序列
 static const string DB_917 = "root.model_infer_917";
@@ -76,6 +77,7 @@ static string inferenceSql_917() {
 class ModelInferenceGetDoubleTest : public ::testing::Test {
 protected:
     void SetUp() override {
+        plmRequireEndpoint();
         // 连接/建库失败时 GTEST_SKIP 跳过本用例（典型：环境无 AINode 或库不可达），
         // 而非断言失败后留下空 session —— 避免 TearDown 在空/失效 session 上崩溃。
         try {

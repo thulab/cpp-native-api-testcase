@@ -7,6 +7,7 @@
 #include <iostream>
 #include <ostream>
 #include "gtest/gtest.h"
+#include "plm_test_config.h"
 #include <string>
 #include <fstream>
 
@@ -202,10 +203,10 @@ class TableSelectTest : public ::testing::Test {
                 auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
                 session_select_test =std::shared_ptr<TableSession>(
                     builder
-                    ->host("127.0.0.1")
-                    ->rpcPort(6667)
-                    ->username("root")
-                    ->password("root")
+                    ->host(plmHost())
+                    ->rpcPort(plmPort())
+                    ->username(plmUser())
+                    ->password(plmPassword())
                     ->build()
                 );
                 session_select_test->executeNonQueryStatement("drop database if exists " + database_name_select_test);

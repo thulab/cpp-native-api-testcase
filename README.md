@@ -64,3 +64,19 @@ cd iotdb
 
 ![image-20240912111707611](./assert/run_test2.png)
 
+
+## PLM 接入（start.sh）
+
+仓库根目录的 `start.sh` 是 TimechoPLM 测试程序统一入口：
+
+```bash
+sh start.sh prepare                 # 编译测试程序（需先准备 client/include、client/lib）
+sh start.sh list-cases --json       # 用例清单（stdout 仅 JSON）
+sh start.sh case <CASE_ID>          # 单条用例，产物写 $PLM_REPORT_DIR
+```
+
+- `PLM_AUTOMATION_TYPE`：默认 `session-cpp`。
+- `PLM_REPORT_DIR`：JUnit XML 输出目录（相对仓库根，默认 `reports/`）。
+- `IOTDB_HOST` / `IOTDB_PORT`：PLM 执行时由平台按 `k8sInstanceId` 注入；缺少任一项时 `case` 直接失败，不会回退默认地址。
+- `IOTDB_USER` / `IOTDB_PASSWORD`：可选覆盖，默认 `root/TimechoDB@2021`。
+- 运行前置：`client/include` 与 `client/lib` 下需有 TimechoDB C++ SDK（`libiotdb_session.so`），以及 gtest 头文件/库；`compile.sh` 会构建 `build/test/main`。

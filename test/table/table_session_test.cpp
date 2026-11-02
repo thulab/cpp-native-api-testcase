@@ -3,6 +3,7 @@
 #include <iostream>
 #include <ostream>
 #include "gtest/gtest.h"
+#include "plm_test_config.h"
 
 using namespace std;
 
@@ -85,10 +86,10 @@ TEST(TestSessionConnection, TestDefaultValue) {
         auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
-            ->host("127.0.0.1")
-            ->rpcPort(6667)
-            ->username("root")
-            ->password("root")
+            ->host(plmHost())
+            ->rpcPort(plmPort())
+            ->username(plmUser())
+            ->password(plmPassword())
             ->build()
         );
         
@@ -107,10 +108,10 @@ TEST(TestSessionConnection, TestDatabaseParameter) {
         auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
-            ->host("127.0.0.1")
-            ->rpcPort(6667)
-            ->username("root")
-            ->password("root")
+            ->host(plmHost())
+            ->rpcPort(plmPort())
+            ->username(plmUser())
+            ->password(plmPassword())
             ->database("table_session_test2")
             ->build()
         );
@@ -131,10 +132,10 @@ TEST(TestSessionConnection, TestFetchSizeParameter) {
         auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
-            ->host("127.0.0.1")
-            ->rpcPort(6667)
-            ->username("root")
-            ->password("root")
+            ->host(plmHost())
+            ->rpcPort(plmPort())
+            ->username(plmUser())
+            ->password(plmPassword())
             ->fetchSize(1)
             ->build()
         );
@@ -151,10 +152,10 @@ TEST(TestSessionConnection, TestFetchSizeParameter) {
         auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
-            ->host("127.0.0.1")
-            ->rpcPort(6667)
-            ->username("root")
-            ->password("root")
+            ->host(plmHost())
+            ->rpcPort(plmPort())
+            ->username(plmUser())
+            ->password(plmPassword())
             ->fetchSize(10000)
             ->build()
         );
@@ -174,10 +175,10 @@ TEST(TestSessionConnection, TestZoneIdParameter) {
         auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
-            ->host("127.0.0.1")
-            ->rpcPort(6667)
-            ->username("root")
-            ->password("root")
+            ->host(plmHost())
+            ->rpcPort(plmPort())
+            ->username(plmUser())
+            ->password(plmPassword())
             ->zoneId("America/New_York")
             ->build()
         );
@@ -197,10 +198,10 @@ TEST(TestSessionConnection, TestAllParameter) {
         auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
-            ->host("127.0.0.1")
-            ->rpcPort(6667)
-            ->username("root")
-            ->password("root")
+            ->host(plmHost())
+            ->rpcPort(plmPort())
+            ->username(plmUser())
+            ->password(plmPassword())
             ->database("table_session_test2")
             ->fetchSize(10000)
             ->build()
@@ -223,8 +224,8 @@ TEST(TestSessionConnectionError, TestErrorUsernameAndPasswordParameter) {
         auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
-            ->host("127.0.0.1")
-            ->rpcPort(6667)
+            ->host(plmHost())
+            ->rpcPort(plmPort())
             ->username("error")
             ->password("error")
             ->build()
@@ -242,9 +243,9 @@ TEST(TestSessionConnectionError, TestErrorUsernameAndPasswordParameter) {
 //         auto session =std::shared_ptr<TableSession>(
 //             builder
 //             ->host("192.0.0.1")
-//             ->rpcPort(6667)
-//             ->username("root")
-//             ->password("root")
+//             ->rpcPort(plmPort())
+//             ->username(plmUser())
+//             ->password(plmPassword())
 //             ->build()
 //         );
 //         FAIL() << "Expecting an error, but actually running normally";
@@ -259,10 +260,10 @@ TEST(TestSessionConnectionError, TestErrorRpcPortParameter) {
         auto builder = std::unique_ptr<TableSessionBuilder>(new TableSessionBuilder());
         auto session =std::shared_ptr<TableSession>(
             builder
-            ->host("127.0.0.1")
+            ->host(plmHost())
             ->rpcPort(0000)
-            ->username("root")
-            ->password("root")
+            ->username(plmUser())
+            ->password(plmPassword())
             ->build()
         );
         FAIL() << "Expecting an error, but actually running normally";
