@@ -9,18 +9,6 @@
   },
   "cases": [
     {
-      "target": "InsertTest.test_all_datatype_null_same_time_and_device_and_device",
-      "name": "C++ 原生｜表模型-写入：同一时间分区同设备写入全类型含空值",
-      "description": "验证同一时间分区同设备写入全类型含空值。",
-      "priority": "P1",
-      "caseType": "功能测试",
-      "model": "表模型",
-      "automationType": "session-cpp",
-      "featurePaths": [
-        "接口模块/C++ 原生接口/表模型-写入"
-      ]
-    },
-    {
       "target": "TableSelectTest.TestSelect1",
       "name": "C++ 原生｜表模型-查询：SessionDataSet 与 RowRecord 字段校验",
       "description": "验证SessionDataSet 与 RowRecord 字段校验。",
@@ -150,30 +138,6 @@
       "automationType": "session-cpp",
       "featurePaths": [
         "接口模块/C++ 原生接口/树模型-查询"
-      ]
-    },
-    {
-      "target": "ModelInferenceGetDoubleTest.TestInferenceToStringNotThrow",
-      "name": "C++ 原生｜模型推理：CALL INFERENCE 结果集迭代不抛 getDouble",
-      "description": "验证CALL INFERENCE 结果集迭代不抛 getDouble。",
-      "priority": "P2",
-      "caseType": "功能测试",
-      "model": "树模型",
-      "automationType": "session-cpp",
-      "featurePaths": [
-        "接口模块/C++ 原生接口/模型推理"
-      ]
-    },
-    {
-      "target": "ModelInferenceGetDoubleTest.TestInferenceGetDoubleReadable",
-      "name": "C++ 原生｜模型推理：推理结果 output 列可按 DOUBLE 读取",
-      "description": "验证推理结果 output 列可按 DOUBLE 读取。",
-      "priority": "P2",
-      "caseType": "功能测试",
-      "model": "树模型",
-      "automationType": "session-cpp",
-      "featurePaths": [
-        "接口模块/C++ 原生接口/模型推理"
       ]
     }
   ]
