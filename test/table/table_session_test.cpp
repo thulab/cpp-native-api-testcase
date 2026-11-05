@@ -34,6 +34,8 @@ static inline std::string optStr(const Optional<std::string>& o, const std::stri
 
 bool isErrorSessionTest = false;
 
+static void createDatabaseWithRetry(const shared_ptr<TableSession>& session, const string& database);
+
 /*
  * 测试表模型session操作
  */
@@ -42,7 +44,7 @@ bool isErrorSessionTest = false;
 void validity1(const string& caseName, shared_ptr<TableSession> session) {
     try {
         dropDatabaseWithRetry(session, "table_session_test1");
-        session->executeNonQueryStatement("CREATE DATABASE table_session_test1");
+        createDatabaseWithRetry(session, "table_session_test1");
         session->executeNonQueryStatement("use table_session_test1");
         session->executeNonQueryStatement("create table t1 (tag1 string tag, s1 string field)");
         session->executeNonQueryStatement("insert into t1 (tag1, s1) values('string', 'text')");
@@ -71,6 +73,21 @@ void validity1(const string& caseName, shared_ptr<TableSession> session) {
     }
 }
 
+static void createDatabaseWithRetry(const shared_ptr<TableSession>& session, const string& database) {
+    for (int attempt = 0; attempt < 20; ++attempt) {
+        try {
+            session->executeNonQueryStatement("CREATE DATABASE " + database);
+            return;
+        } catch (const exception& e) {
+            if (string(e.what()).find("304") == string::npos) {
+                throw;
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        }
+    }
+    throw runtime_error("create database " + database + " failed after retries");
+}
+
 // 先在不绑定 database 的会话里准备好数据库，再让绑定 database 的会话打开；
 // 否则目标库不存在时后续语句会报 701: database is not specified。
 static void prepareDatabase(const string& database) {
@@ -82,7 +99,7 @@ static void prepareDatabase(const string& database) {
             ->password(plmPassword())
             ->build());
     dropDatabaseWithRetry(session, database);
-    session->executeNonQueryStatement("CREATE DATABASE " + database);
+    createDatabaseWithRetry(session, database);
     session->close();
 }
 
