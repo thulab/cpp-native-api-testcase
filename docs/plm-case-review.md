@@ -37,3 +37,10 @@
 - 2 条错误路径用例（错误用户名/口令、错误端口）断言了具体错误文案；这是程序自身断言，不影响 PLM 用例命名，但若服务端文案变化需同步修改测试。
 - 表模型/树模型查询用例依赖 `data/table/select_data1.csv`、`data/tree/select_data1.csv`，执行机上仓库需包含 data 目录。
 
+## 四、PLM 真实验证（2026-11-05）
+
+- 执行机：qa-fqx-76；K8s 实例由产品 Native 模板创建；PLM run **808 SUCCESS，11/11 passed**。
+- 首轮 run 804/805/806/807 暴露并修复了两个 K8s 适配问题：
+  1. **内部 DNS**：`Session` 默认 `enableAutoFetch=true` 会拉取节点列表并拿到 `*.svc.cluster.local`，执行机无法解析。已在 `plmTableBuilder` / `plmTreeSession` 中同时关闭 `enableAutoFetch` 与 `enableRedirections`。
+  2. **DDL 在途 304**：连续执行同一批会话用例时，`drop database` 返回成功后服务端 DDL 仍在途，紧随的 `use` / `create table` 会返回 304。已把 `drop/create/use/create table/drop table` 统一收敛到 `executeWithRetry`（仅对 304 重试）。
+- 说明：这两项是 K8s 共享实例下的适配，不影响 111 上本地单实例回归的执行语义。
