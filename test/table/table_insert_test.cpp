@@ -5,6 +5,7 @@
 #include <iostream>
 #include <ostream>
 #include "gtest/gtest.h"
+#include "plm_test_config.h"
 #include <string>
 #include <fstream>
 
@@ -24,11 +25,11 @@ class InsertTest : public ::testing::Test {
         void SetUp() override {
             // 初始化操作
             try {
-                session1 = (new TableSessionBuilder())
-                    ->host("127.0.0.1")
-                    ->rpcPort(6667)
-                    ->username("root")
-                    ->password("root")
+                session1 = (plmTableBuilder())
+                    ->host(plmHost())
+                    ->rpcPort(plmPort())
+                    ->username(plmUser())
+                    ->password(plmPassword())
                     ->build();
                     
                 session1->executeNonQueryStatement("CREATE DATABASE test_insert_db1");

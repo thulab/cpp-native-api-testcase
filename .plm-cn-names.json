@@ -1,0 +1,13 @@
+{
+  "TimechoDB-3116": "C++ 原生｜表模型-查询：SessionDataSet 与 RowRecord 字段校验",
+  "TimechoDB-3117": "C++ 原生｜表模型-查询：DataIterator 列名/类型/值一致性",
+  "TimechoDB-3118": "C++ 原生｜表模型-会话：默认参数连接",
+  "TimechoDB-3119": "C++ 原生｜表模型-会话：指定 database 参数",
+  "TimechoDB-3120": "C++ 原生｜表模型-会话：fetchSize 参数",
+  "TimechoDB-3121": "C++ 原生｜表模型-会话：zoneId 参数",
+  "TimechoDB-3122": "C++ 原生｜表模型-会话：全部参数组合",
+  "TimechoDB-3123": "C++ 原生｜表模型-会话：错误用户名或密码",
+  "TimechoDB-3124": "C++ 原生｜表模型-会话：错误端口",
+  "TimechoDB-3125": "C++ 原生｜树模型-查询：SessionDataSet 与 RowRecord 字段校验",
+  "TimechoDB-3126": "C++ 原生｜树模型-查询：DataIterator 列名/类型/值一致性"
+}
