@@ -11,10 +11,10 @@ using namespace std;
 
 // K8s 实例可能复用存储，上一轮失败会留下同名数据库；建库前先清理。
 // 304 表示服务端仍有 DDL 在途，稍等重试即可。
-static void dropDatabaseWithRetry(const shared_ptr<TableSession>& session, const string& database) {
+static void executeWithRetry(const shared_ptr<TableSession>& session, const string& sql) {
     for (int attempt = 0; attempt < 20; ++attempt) {
         try {
-            session->executeNonQueryStatement("drop database if exists " + database);
+            session->executeNonQueryStatement(sql);
             return;
         } catch (const exception& e) {
             if (string(e.what()).find("304") == string::npos) {
@@ -23,7 +23,7 @@ static void dropDatabaseWithRetry(const shared_ptr<TableSession>& session, const
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
     }
-    throw runtime_error("drop database " + database + " failed after retries");
+    throw runtime_error("execute failed after retries: " + sql);
 }
 
 // 适配新 SDK：Optional<T> 无 value_or，提供等价 helper（单次求值，避免 next() 重复推进游标）
@@ -34,8 +34,6 @@ static inline std::string optStr(const Optional<std::string>& o, const std::stri
 
 bool isErrorSessionTest = false;
 
-static void createDatabaseWithRetry(const shared_ptr<TableSession>& session, const string& database);
-
 /*
  * 测试表模型session操作
  */
@@ -43,11 +41,11 @@ static void createDatabaseWithRetry(const shared_ptr<TableSession>& session, con
 // 用于验证Session有效性
 void validity1(const string& caseName, shared_ptr<TableSession> session) {
     try {
-        dropDatabaseWithRetry(session, "table_session_test1");
-        createDatabaseWithRetry(session, "table_session_test1");
-        session->executeNonQueryStatement("use table_session_test1");
-        session->executeNonQueryStatement("create table t1 (tag1 string tag, s1 string field)");
-        session->executeNonQueryStatement("insert into t1 (tag1, s1) values('string', 'text')");
+        executeWithRetry(session, "drop database if exists table_session_test1");
+        executeWithRetry(session, "CREATE DATABASE table_session_test1");
+        executeWithRetry(session, "use table_session_test1");
+        executeWithRetry(session, "create table t1 (tag1 string tag, s1 string field)");
+        executeWithRetry(session, "insert into t1 (tag1, s1) values('string', 'text')");
         unique_ptr<SessionDataSet> dataSet1 = session->executeQueryStatement("show databases");
         bool foundDatabase = false;
         while (dataSet1->hasNext()) {
@@ -65,27 +63,12 @@ void validity1(const string& caseName, shared_ptr<TableSession> session) {
         while (dataSet3->hasNext()) {
             ASSERT_EQ("text", optStr(dataSet3->next()->fields[0].stringV, "null")) << "The Data is incorrect";
         }
-        session->executeNonQueryStatement("drop table t1");
-        session->executeNonQueryStatement("drop DATABASE table_session_test1");
+        executeWithRetry(session, "drop table t1");
+        executeWithRetry(session, "drop DATABASE table_session_test1");
     } catch (IoTDBException &e) {
         isErrorSessionTest = true;
         ASSERT_EQ(false, isErrorSessionTest) <<"[Error] " << caseName << " - " << string(e.what());
     }
-}
-
-static void createDatabaseWithRetry(const shared_ptr<TableSession>& session, const string& database) {
-    for (int attempt = 0; attempt < 20; ++attempt) {
-        try {
-            session->executeNonQueryStatement("CREATE DATABASE " + database);
-            return;
-        } catch (const exception& e) {
-            if (string(e.what()).find("304") == string::npos) {
-                throw;
-            }
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        }
-    }
-    throw runtime_error("create database " + database + " failed after retries");
 }
 
 // 先在不绑定 database 的会话里准备好数据库，再让绑定 database 的会话打开；
@@ -98,16 +81,16 @@ static void prepareDatabase(const string& database) {
             ->username(plmUser())
             ->password(plmPassword())
             ->build());
-    dropDatabaseWithRetry(session, database);
-    createDatabaseWithRetry(session, database);
+    executeWithRetry(session, "drop database if exists " + database);
+    executeWithRetry(session, "CREATE DATABASE " + database);
     session->close();
 }
 
 // 用于验证test_database有效性（会话已绑定 database）
 void validity2(const string& caseName, shared_ptr<TableSession> session) {
     try {
-        session->executeNonQueryStatement("create table t1 (tag1 string tag, s1 string field)");
-        session->executeNonQueryStatement("insert into t1 (tag1, s1) values('string', 'text')");
+        executeWithRetry(session, "create table t1 (tag1 string tag, s1 string field)");
+        executeWithRetry(session, "insert into t1 (tag1, s1) values('string', 'text')");
         unique_ptr<SessionDataSet> dataSet1 = session->executeQueryStatement("show databases");
         bool foundDatabase = false;
         while (dataSet1->hasNext()) {
@@ -125,8 +108,8 @@ void validity2(const string& caseName, shared_ptr<TableSession> session) {
         while (dataSet3->hasNext()) {
             ASSERT_EQ("text", optStr(dataSet3->next()->fields[0].stringV, "null")) << "[Error] " << caseName << ": The Data is incorrect";
         }
-        session->executeNonQueryStatement("drop table t1");
-        session->executeNonQueryStatement("drop DATABASE table_session_test2");
+        executeWithRetry(session, "drop table t1");
+        executeWithRetry(session, "drop DATABASE table_session_test2");
     } catch (IoTDBException &e) {
         isErrorSessionTest = true;
         ASSERT_EQ(false, isErrorSessionTest) <<"[Error] " << caseName << " - " << string(e.what());
