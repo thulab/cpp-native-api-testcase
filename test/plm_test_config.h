@@ -60,20 +60,28 @@ inline std::string plmPassword() {
     return plmEnv("IOTDB_PASSWORD", "TimechoDB@2021");
 }
 
-/** 表模型 Builder：关闭重定向，避免被服务端导向 K8s 集群内部 DNS。 */
+/**
+ * 表模型 Builder：关闭自动获取节点与重定向。
+ *
+ * K8s 实例的外部地址是唯一的可访问入口；客户端自动拉取节点列表会拿到
+ * DataNode 的集群内部 DNS（*.svc.cluster.local），执行机上无法解析。
+ * 只连接平台注入的外部地址，避免被导向内部 DNS。
+ */
 inline TableSessionBuilder* plmTableBuilder() {
     auto* builder = new TableSessionBuilder();
+    builder->enableAutoFetch = false;
     builder->enableRedirections = false;
     return builder;
 }
 
-/** 树模型会话：关闭重定向，直接使用平台注入的外部连接地址。 */
+/** 树模型会话：关闭自动获取节点与重定向，直接使用平台注入的外部连接地址。 */
 inline std::shared_ptr<Session> plmTreeSession() {
     auto builder = SessionBuilder();
     builder.host(plmHost())
         ->rpcPort(plmPort())
         ->username(plmUser())
         ->password(plmPassword())
+        ->enableAutoFetch(false)
         ->enableRedirections(false);
     return builder.build();
 }
