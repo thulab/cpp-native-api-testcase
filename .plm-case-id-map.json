@@ -1,0 +1,51 @@
+{
+  "nmap": {
+    "TimechoDB-3116": [
+      "TableSelectTest.TestSelect1"
+    ],
+    "TimechoDB-3117": [
+      "TableSelectTest.TestSelect2"
+    ],
+    "TimechoDB-3118": [
+      "TestSessionConnection.TestDefaultValue"
+    ],
+    "TimechoDB-3119": [
+      "TestSessionConnection.TestDatabaseParameter"
+    ],
+    "TimechoDB-3120": [
+      "TestSessionConnection.TestFetchSizeParameter"
+    ],
+    "TimechoDB-3121": [
+      "TestSessionConnection.TestZoneIdParameter"
+    ],
+    "TimechoDB-3122": [
+      "TestSessionConnection.TestAllParameter"
+    ],
+    "TimechoDB-3123": [
+      "TestSessionConnectionError.TestErrorUsernameAndPasswordParameter"
+    ],
+    "TimechoDB-3124": [
+      "TestSessionConnectionError.TestErrorRpcPortParameter"
+    ],
+    "TimechoDB-3125": [
+      "TreeSelectTest.TestSelect1"
+    ],
+    "TimechoDB-3126": [
+      "TreeSelectTest.TestSelect2"
+    ]
+  },
+  "revmap": {
+    "TableSelectTest.TestSelect1": "TimechoDB-3116",
+    "TableSelectTest.TestSelect2": "TimechoDB-3117",
+    "TestSessionConnection.TestDefaultValue": "TimechoDB-3118",
+    "TestSessionConnection.TestDatabaseParameter": "TimechoDB-3119",
+    "TestSessionConnection.TestFetchSizeParameter": "TimechoDB-3120",
+    "TestSessionConnection.TestZoneIdParameter": "TimechoDB-3121",
+    "TestSessionConnection.TestAllParameter": "TimechoDB-3122",
+    "TestSessionConnectionError.TestErrorUsernameAndPasswordParameter": "TimechoDB-3123",
+    "TestSessionConnectionError.TestErrorRpcPortParameter": "TimechoDB-3124",
+    "TreeSelectTest.TestSelect1": "TimechoDB-3125",
+    "TreeSelectTest.TestSelect2": "TimechoDB-3126"
+  },
+  "aliases": {}
+}
