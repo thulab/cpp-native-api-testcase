@@ -61,6 +61,16 @@ inline std::string plmPassword() {
 }
 
 /**
+ * 重定向开关：K8s 单入口实例（客户端拉到 *.svc.cluster.local 无法解析）默认关闭；
+ * PVE 多节点拓扑（1C2D/1C4D）下客户端连首个 DataNode，服务端重定向到其它
+ * DataNode 的可达 IP，通过 PLM_ENABLE_REDIRECTIONS=true 打开以验证重定向。
+ */
+inline bool plmRedirectEnabled() {
+    const char* value = std::getenv("PLM_ENABLE_REDIRECTIONS");
+    return value != nullptr && (std::string(value) == "true" || std::string(value) == "1");
+}
+
+/**
  * 表模型 Builder：关闭自动获取节点与重定向。
  *
  * K8s 实例的外部地址是唯一的可访问入口；客户端自动拉取节点列表会拿到
@@ -70,7 +80,7 @@ inline std::string plmPassword() {
 inline TableSessionBuilder* plmTableBuilder() {
     auto* builder = new TableSessionBuilder();
     builder->enableAutoFetch = false;
-    builder->enableRedirections = false;
+    builder->enableRedirections = plmRedirectEnabled();
     return builder;
 }
 
@@ -82,7 +92,7 @@ inline std::shared_ptr<Session> plmTreeSession() {
         ->username(plmUser())
         ->password(plmPassword())
         ->enableAutoFetch(false)
-        ->enableRedirections(false);
+        ->enableRedirections(plmRedirectEnabled());
     return builder.build();
 }
 
