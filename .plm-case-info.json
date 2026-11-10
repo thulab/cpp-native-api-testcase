@@ -1,0 +1,68 @@
+{
+  "TimechoDB-3116": {
+    "name": "C++ 原生｜表模型-查询：SessionDataSet 与 RowRecord 字段校验",
+    "nodeId": "TableSelectTest.TestSelect1",
+    "plmDescription": "验证SessionDataSet 与 RowRecord 字段校验。",
+    "automationType": "session-cpp"
+  },
+  "TimechoDB-3117": {
+    "name": "C++ 原生｜表模型-查询：DataIterator 列名/类型/值一致性",
+    "nodeId": "TableSelectTest.TestSelect2",
+    "plmDescription": "验证DataIterator 列名/类型/值一致性。",
+    "automationType": "session-cpp"
+  },
+  "TimechoDB-3118": {
+    "name": "C++ 原生｜表模型-会话：默认参数连接",
+    "nodeId": "TestSessionConnection.TestDefaultValue",
+    "plmDescription": "验证默认参数连接。",
+    "automationType": "session-cpp"
+  },
+  "TimechoDB-3119": {
+    "name": "C++ 原生｜表模型-会话：指定 database 参数",
+    "nodeId": "TestSessionConnection.TestDatabaseParameter",
+    "plmDescription": "验证指定 database 参数。",
+    "automationType": "session-cpp"
+  },
+  "TimechoDB-3120": {
+    "name": "C++ 原生｜表模型-会话：fetchSize 参数",
+    "nodeId": "TestSessionConnection.TestFetchSizeParameter",
+    "plmDescription": "验证fetchSize 参数。",
+    "automationType": "session-cpp"
+  },
+  "TimechoDB-3121": {
+    "name": "C++ 原生｜表模型-会话：zoneId 参数",
+    "nodeId": "TestSessionConnection.TestZoneIdParameter",
+    "plmDescription": "验证zoneId 参数。",
+    "automationType": "session-cpp"
+  },
+  "TimechoDB-3122": {
+    "name": "C++ 原生｜表模型-会话：全部参数组合",
+    "nodeId": "TestSessionConnection.TestAllParameter",
+    "plmDescription": "验证全部参数组合。",
+    "automationType": "session-cpp"
+  },
+  "TimechoDB-3123": {
+    "name": "C++ 原生｜表模型-会话：错误用户名或密码",
+    "nodeId": "TestSessionConnectionError.TestErrorUsernameAndPasswordParameter",
+    "plmDescription": "验证错误用户名或密码。",
+    "automationType": "session-cpp"
+  },
+  "TimechoDB-3124": {
+    "name": "C++ 原生｜表模型-会话：错误端口",
+    "nodeId": "TestSessionConnectionError.TestErrorRpcPortParameter",
+    "plmDescription": "验证错误端口。",
+    "automationType": "session-cpp"
+  },
+  "TimechoDB-3125": {
+    "name": "C++ 原生｜树模型-查询：SessionDataSet 与 RowRecord 字段校验",
+    "nodeId": "TreeSelectTest.TestSelect1",
+    "plmDescription": "验证SessionDataSet 与 RowRecord 字段校验。",
+    "automationType": "session-cpp"
+  },
+  "TimechoDB-3126": {
+    "name": "C++ 原生｜树模型-查询：DataIterator 列名/类型/值一致性",
+    "nodeId": "TreeSelectTest.TestSelect2",
+    "plmDescription": "验证DataIterator 列名/类型/值一致性。",
+    "automationType": "session-cpp"
+  }
+}

@@ -7,6 +7,7 @@
 #include <iostream>
 #include <ostream>
 #include "gtest/gtest.h"
+#include "plm_test_config.h"
 #include <string>
 #include <fstream>
 
@@ -200,8 +201,14 @@ class TreeSelectTest : public ::testing::Test {
         void SetUp() override {
             // 初始化操作
             try {
-                treeSession_TreeSelect = std::make_shared<Session>("127.0.0.1", 6667, "root", "root");
+                treeSession_TreeSelect = plmTreeSession();
                 treeSession_TreeSelect->open(false);
+                // K8s 实例可能复用存储，先清理上一轮遗留的树模型数据；
+                // 首次运行没有数据时该语句可能报错，忽略即可。
+                try {
+                    treeSession_TreeSelect->executeNonQueryStatement("delete database root.**");
+                } catch (const exception&) {
+                }
                 treeSession_TreeSelect->executeNonQueryStatement("CREATE DATABASE " + DATABASE_NAME_TreeSelect);
                 treeSession_TreeSelect->createMultiTimeseries(paths_TreeSelect, dataTypes_TreeSelect, encodings_TreeSelect, compressors_TreeSelect, NULL, NULL, NULL, NULL);
                 insertDate_TreeSelect();

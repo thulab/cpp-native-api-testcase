@@ -1,0 +1,166 @@
+{
+  "productId": 1,
+  "defaults": {
+    "caseType": "功能测试",
+    "model": "通用",
+    "owner": "肖林捷",
+    "automationType": "session-cpp",
+    "executeMethod": "自动"
+  },
+  "cases": [
+    {
+      "target": "TableSelectTest.TestSelect1",
+      "name": "C++ 原生｜表模型-查询：SessionDataSet 与 RowRecord 字段校验",
+      "description": "验证SessionDataSet 与 RowRecord 字段校验。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-查询"
+      ],
+      "plmCaseId": "TimechoDB-3116",
+      "plmId": 7687
+    },
+    {
+      "target": "TableSelectTest.TestSelect2",
+      "name": "C++ 原生｜表模型-查询：DataIterator 列名/类型/值一致性",
+      "description": "验证DataIterator 列名/类型/值一致性。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-查询"
+      ],
+      "plmCaseId": "TimechoDB-3117",
+      "plmId": 7688
+    },
+    {
+      "target": "TestSessionConnection.TestDefaultValue",
+      "name": "C++ 原生｜表模型-会话：默认参数连接",
+      "description": "验证默认参数连接。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-会话"
+      ],
+      "plmCaseId": "TimechoDB-3118",
+      "plmId": 7689
+    },
+    {
+      "target": "TestSessionConnection.TestDatabaseParameter",
+      "name": "C++ 原生｜表模型-会话：指定 database 参数",
+      "description": "验证指定 database 参数。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-会话"
+      ],
+      "plmCaseId": "TimechoDB-3119",
+      "plmId": 7690
+    },
+    {
+      "target": "TestSessionConnection.TestFetchSizeParameter",
+      "name": "C++ 原生｜表模型-会话：fetchSize 参数",
+      "description": "验证fetchSize 参数。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-会话"
+      ],
+      "plmCaseId": "TimechoDB-3120",
+      "plmId": 7691
+    },
+    {
+      "target": "TestSessionConnection.TestZoneIdParameter",
+      "name": "C++ 原生｜表模型-会话：zoneId 参数",
+      "description": "验证zoneId 参数。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-会话"
+      ],
+      "plmCaseId": "TimechoDB-3121",
+      "plmId": 7692
+    },
+    {
+      "target": "TestSessionConnection.TestAllParameter",
+      "name": "C++ 原生｜表模型-会话：全部参数组合",
+      "description": "验证全部参数组合。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-会话"
+      ],
+      "plmCaseId": "TimechoDB-3122",
+      "plmId": 7693
+    },
+    {
+      "target": "TestSessionConnectionError.TestErrorUsernameAndPasswordParameter",
+      "name": "C++ 原生｜表模型-会话：错误用户名或密码",
+      "description": "验证错误用户名或密码。",
+      "priority": "P2",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-会话"
+      ],
+      "plmCaseId": "TimechoDB-3123",
+      "plmId": 7694
+    },
+    {
+      "target": "TestSessionConnectionError.TestErrorRpcPortParameter",
+      "name": "C++ 原生｜表模型-会话：错误端口",
+      "description": "验证错误端口。",
+      "priority": "P2",
+      "caseType": "功能测试",
+      "model": "表模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/表模型-会话"
+      ],
+      "plmCaseId": "TimechoDB-3124",
+      "plmId": 7695
+    },
+    {
+      "target": "TreeSelectTest.TestSelect1",
+      "name": "C++ 原生｜树模型-查询：SessionDataSet 与 RowRecord 字段校验",
+      "description": "验证SessionDataSet 与 RowRecord 字段校验。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "树模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/树模型-查询"
+      ],
+      "plmCaseId": "TimechoDB-3125",
+      "plmId": 7696
+    },
+    {
+      "target": "TreeSelectTest.TestSelect2",
+      "name": "C++ 原生｜树模型-查询：DataIterator 列名/类型/值一致性",
+      "description": "验证DataIterator 列名/类型/值一致性。",
+      "priority": "P1",
+      "caseType": "功能测试",
+      "model": "树模型",
+      "automationType": "session-cpp",
+      "featurePaths": [
+        "接口模块/C++ 原生接口/树模型-查询"
+      ],
+      "plmCaseId": "TimechoDB-3126",
+      "plmId": 7697
+    }
+  ]
+}
