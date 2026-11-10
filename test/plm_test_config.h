@@ -61,13 +61,16 @@ inline std::string plmPassword() {
 }
 
 /**
- * 重定向开关：K8s 单入口实例（客户端拉到 *.svc.cluster.local 无法解析）默认关闭；
- * PVE 多节点拓扑（1C2D/1C4D）下客户端连首个 DataNode，服务端重定向到其它
- * DataNode 的可达 IP，通过 PLM_ENABLE_REDIRECTIONS=true 打开以验证重定向。
+ * 重定向开关：默认开启（PLM 固定使用 PVE）。多节点拓扑（1C2D/1C4D）下客户端连
+ * 首个 DataNode，服务端会把请求重定向到其它 DataNode 的可达 IP；单入口场景
+ * 可显式 PLM_ENABLE_REDIRECTIONS=false 关闭。
  */
 inline bool plmRedirectEnabled() {
     const char* value = std::getenv("PLM_ENABLE_REDIRECTIONS");
-    return value != nullptr && (std::string(value) == "true" || std::string(value) == "1");
+    if (value == nullptr || value[0] == '\0') {
+        return true;
+    }
+    return std::string(value) == "true" || std::string(value) == "1";
 }
 
 /**
